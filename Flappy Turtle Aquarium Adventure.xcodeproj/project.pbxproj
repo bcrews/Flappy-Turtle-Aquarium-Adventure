@@ -14,6 +14,28 @@
 		42C1EC351C3F4E44002E07AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC331C3F4E44002E07AB /* Main.storyboard */; };
 		42C1EC371C3F4E44002E07AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC361C3F4E44002E07AB /* Assets.xcassets */; };
 		42C1EC3A1C3F4E44002E07AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC381C3F4E44002E07AB /* LaunchScreen.storyboard */; };
+		42C1EC431C3F6C44002E07AB /* Level1.sks in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC421C3F6C44002E07AB /* Level1.sks */; };
+		42C1EC601C3F6D71002E07AB /* backgrounds.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC481C3F6D71002E07AB /* backgrounds.atlas */; };
+		42C1EC611C3F6D71002E07AB /* sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC491C3F6D71002E07AB /* sprites.atlas */; };
+		42C1EC621C3F6D71002E07AB /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC4B1C3F6D71002E07AB /* CGFloat+Extensions.swift */; };
+		42C1EC631C3F6D71002E07AB /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC4C1C3F6D71002E07AB /* CGPoint+Extensions.swift */; };
+		42C1EC641C3F6D71002E07AB /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC4D1C3F6D71002E07AB /* CGVector+Extensions.swift */; };
+		42C1EC651C3F6D71002E07AB /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC4E1C3F6D71002E07AB /* Int+Extensions.swift */; };
+		42C1EC661C3F6D71002E07AB /* SKAction+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC4F1C3F6D71002E07AB /* SKAction+Extensions.swift */; };
+		42C1EC671C3F6D71002E07AB /* SKAction+SpecialEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC501C3F6D71002E07AB /* SKAction+SpecialEffects.swift */; };
+		42C1EC681C3F6D71002E07AB /* SKColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC511C3F6D71002E07AB /* SKColor+Extensions.swift */; };
+		42C1EC691C3F6D71002E07AB /* SKNode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC521C3F6D71002E07AB /* SKNode+Extensions.swift */; };
+		42C1EC6A1C3F6D71002E07AB /* SKTAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC531C3F6D71002E07AB /* SKTAudio.swift */; };
+		42C1EC6B1C3F6D71002E07AB /* SKTEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC541C3F6D71002E07AB /* SKTEffects.swift */; };
+		42C1EC6C1C3F6D71002E07AB /* SKTTimingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC551C3F6D71002E07AB /* SKTTimingFunctions.swift */; };
+		42C1EC6D1C3F6D71002E07AB /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC561C3F6D71002E07AB /* Vector3.swift */; };
+		42C1EC6E1C3F6D71002E07AB /* coin.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC591C3F6D71002E07AB /* coin.wav */; };
+		42C1EC6F1C3F6D71002E07AB /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5A1C3F6D71002E07AB /* ding.wav */; };
+		42C1EC701C3F6D71002E07AB /* falling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5B1C3F6D71002E07AB /* falling.wav */; };
+		42C1EC711C3F6D71002E07AB /* flapping.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5C1C3F6D71002E07AB /* flapping.wav */; };
+		42C1EC721C3F6D71002E07AB /* hitGround.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5D1C3F6D71002E07AB /* hitGround.wav */; };
+		42C1EC731C3F6D71002E07AB /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5E1C3F6D71002E07AB /* pop.wav */; };
+		42C1EC741C3F6D71002E07AB /* whack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5F1C3F6D71002E07AB /* whack.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +48,28 @@
 		42C1EC361C3F4E44002E07AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42C1EC391C3F4E44002E07AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		42C1EC3B1C3F4E44002E07AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42C1EC421C3F6C44002E07AB /* Level1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1.sks; sourceTree = "<group>"; };
+		42C1EC481C3F6D71002E07AB /* backgrounds.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = backgrounds.atlas; sourceTree = "<group>"; };
+		42C1EC491C3F6D71002E07AB /* sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = sprites.atlas; sourceTree = "<group>"; };
+		42C1EC4B1C3F6D71002E07AB /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
+		42C1EC4C1C3F6D71002E07AB /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
+		42C1EC4D1C3F6D71002E07AB /* CGVector+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGVector+Extensions.swift"; sourceTree = "<group>"; };
+		42C1EC4E1C3F6D71002E07AB /* Int+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
+		42C1EC4F1C3F6D71002E07AB /* SKAction+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKAction+Extensions.swift"; sourceTree = "<group>"; };
+		42C1EC501C3F6D71002E07AB /* SKAction+SpecialEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKAction+SpecialEffects.swift"; sourceTree = "<group>"; };
+		42C1EC511C3F6D71002E07AB /* SKColor+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKColor+Extensions.swift"; sourceTree = "<group>"; };
+		42C1EC521C3F6D71002E07AB /* SKNode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKNode+Extensions.swift"; sourceTree = "<group>"; };
+		42C1EC531C3F6D71002E07AB /* SKTAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTAudio.swift; sourceTree = "<group>"; };
+		42C1EC541C3F6D71002E07AB /* SKTEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTEffects.swift; sourceTree = "<group>"; };
+		42C1EC551C3F6D71002E07AB /* SKTTimingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTTimingFunctions.swift; sourceTree = "<group>"; };
+		42C1EC561C3F6D71002E07AB /* Vector3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
+		42C1EC591C3F6D71002E07AB /* coin.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = coin.wav; sourceTree = "<group>"; };
+		42C1EC5A1C3F6D71002E07AB /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
+		42C1EC5B1C3F6D71002E07AB /* falling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = falling.wav; sourceTree = "<group>"; };
+		42C1EC5C1C3F6D71002E07AB /* flapping.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flapping.wav; sourceTree = "<group>"; };
+		42C1EC5D1C3F6D71002E07AB /* hitGround.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitGround.wav; sourceTree = "<group>"; };
+		42C1EC5E1C3F6D71002E07AB /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
+		42C1EC5F1C3F6D71002E07AB /* whack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whack.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +102,8 @@
 		42C1EC2A1C3F4E44002E07AB /* Flappy Turtle Aquarium Adventure */ = {
 			isa = PBXGroup;
 			children = (
+				42C1EC461C3F6D71002E07AB /* Resources */,
+				42C1EC411C3F6C10002E07AB /* Scenes */,
 				42C1EC2B1C3F4E44002E07AB /* AppDelegate.swift */,
 				42C1EC2D1C3F4E44002E07AB /* GameScene.sks */,
 				42C1EC2F1C3F4E44002E07AB /* GameScene.swift */,
@@ -68,6 +114,74 @@
 				42C1EC3B1C3F4E44002E07AB /* Info.plist */,
 			);
 			path = "Flappy Turtle Aquarium Adventure";
+			sourceTree = "<group>";
+		};
+		42C1EC411C3F6C10002E07AB /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				42C1EC421C3F6C44002E07AB /* Level1.sks */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
+		42C1EC461C3F6D71002E07AB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				42C1EC471C3F6D71002E07AB /* Art */,
+				42C1EC4A1C3F6D71002E07AB /* SKTUtils */,
+				42C1EC571C3F6D71002E07AB /* Sounds */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		42C1EC471C3F6D71002E07AB /* Art */ = {
+			isa = PBXGroup;
+			children = (
+				42C1EC481C3F6D71002E07AB /* backgrounds.atlas */,
+				42C1EC491C3F6D71002E07AB /* sprites.atlas */,
+			);
+			path = Art;
+			sourceTree = "<group>";
+		};
+		42C1EC4A1C3F6D71002E07AB /* SKTUtils */ = {
+			isa = PBXGroup;
+			children = (
+				42C1EC4B1C3F6D71002E07AB /* CGFloat+Extensions.swift */,
+				42C1EC4C1C3F6D71002E07AB /* CGPoint+Extensions.swift */,
+				42C1EC4D1C3F6D71002E07AB /* CGVector+Extensions.swift */,
+				42C1EC4E1C3F6D71002E07AB /* Int+Extensions.swift */,
+				42C1EC4F1C3F6D71002E07AB /* SKAction+Extensions.swift */,
+				42C1EC501C3F6D71002E07AB /* SKAction+SpecialEffects.swift */,
+				42C1EC511C3F6D71002E07AB /* SKColor+Extensions.swift */,
+				42C1EC521C3F6D71002E07AB /* SKNode+Extensions.swift */,
+				42C1EC531C3F6D71002E07AB /* SKTAudio.swift */,
+				42C1EC541C3F6D71002E07AB /* SKTEffects.swift */,
+				42C1EC551C3F6D71002E07AB /* SKTTimingFunctions.swift */,
+				42C1EC561C3F6D71002E07AB /* Vector3.swift */,
+			);
+			path = SKTUtils;
+			sourceTree = "<group>";
+		};
+		42C1EC571C3F6D71002E07AB /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				42C1EC581C3F6D71002E07AB /* .wdmc */,
+				42C1EC591C3F6D71002E07AB /* coin.wav */,
+				42C1EC5A1C3F6D71002E07AB /* ding.wav */,
+				42C1EC5B1C3F6D71002E07AB /* falling.wav */,
+				42C1EC5C1C3F6D71002E07AB /* flapping.wav */,
+				42C1EC5D1C3F6D71002E07AB /* hitGround.wav */,
+				42C1EC5E1C3F6D71002E07AB /* pop.wav */,
+				42C1EC5F1C3F6D71002E07AB /* whack.wav */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		42C1EC581C3F6D71002E07AB /* .wdmc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = .wdmc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -102,6 +216,7 @@
 				TargetAttributes = {
 					42C1EC271C3F4E44002E07AB = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = N6QSYL24TV;
 					};
 				};
 			};
@@ -128,10 +243,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42C1EC611C3F6D71002E07AB /* sprites.atlas in Resources */,
 				42C1EC2E1C3F4E44002E07AB /* GameScene.sks in Resources */,
+				42C1EC701C3F6D71002E07AB /* falling.wav in Resources */,
 				42C1EC3A1C3F4E44002E07AB /* LaunchScreen.storyboard in Resources */,
 				42C1EC371C3F4E44002E07AB /* Assets.xcassets in Resources */,
+				42C1EC741C3F6D71002E07AB /* whack.wav in Resources */,
 				42C1EC351C3F4E44002E07AB /* Main.storyboard in Resources */,
+				42C1EC711C3F6D71002E07AB /* flapping.wav in Resources */,
+				42C1EC6E1C3F6D71002E07AB /* coin.wav in Resources */,
+				42C1EC731C3F6D71002E07AB /* pop.wav in Resources */,
+				42C1EC6F1C3F6D71002E07AB /* ding.wav in Resources */,
+				42C1EC721C3F6D71002E07AB /* hitGround.wav in Resources */,
+				42C1EC431C3F6C44002E07AB /* Level1.sks in Resources */,
+				42C1EC601C3F6D71002E07AB /* backgrounds.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +268,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				42C1EC301C3F4E44002E07AB /* GameScene.swift in Sources */,
+				42C1EC631C3F6D71002E07AB /* CGPoint+Extensions.swift in Sources */,
+				42C1EC6C1C3F6D71002E07AB /* SKTTimingFunctions.swift in Sources */,
+				42C1EC6B1C3F6D71002E07AB /* SKTEffects.swift in Sources */,
+				42C1EC671C3F6D71002E07AB /* SKAction+SpecialEffects.swift in Sources */,
+				42C1EC641C3F6D71002E07AB /* CGVector+Extensions.swift in Sources */,
+				42C1EC661C3F6D71002E07AB /* SKAction+Extensions.swift in Sources */,
+				42C1EC681C3F6D71002E07AB /* SKColor+Extensions.swift in Sources */,
 				42C1EC321C3F4E44002E07AB /* GameViewController.swift in Sources */,
+				42C1EC651C3F6D71002E07AB /* Int+Extensions.swift in Sources */,
+				42C1EC691C3F6D71002E07AB /* SKNode+Extensions.swift in Sources */,
+				42C1EC6A1C3F6D71002E07AB /* SKTAudio.swift in Sources */,
+				42C1EC621C3F6D71002E07AB /* CGFloat+Extensions.swift in Sources */,
+				42C1EC6D1C3F6D71002E07AB /* Vector3.swift in Sources */,
 				42C1EC2C1C3F4E44002E07AB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,7 +394,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Flappy Turtle Aquarium Adventure/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bcappdesigns.Flappy-Turtle-Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -268,7 +407,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Flappy Turtle Aquarium Adventure/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bcappdesigns.Flappy-Turtle-Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
