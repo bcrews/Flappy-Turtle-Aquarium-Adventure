@@ -16,11 +16,27 @@
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="eih-3q-CsP">
+                                <rect key="frame" x="0.0" y="534" width="480" height="66"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BV1-FR-VrT" id="CQd-l7-OQZ"/>
+                                </connections>
+                            </adBannerView>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="eih-3q-CsP" secondAttribute="bottom" id="KPP-CV-YFa"/>
+                            <constraint firstItem="eih-3q-CsP" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" id="KY3-sv-ttR"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="iadBanner" destination="eih-3q-CsP" id="mNA-Xc-LaR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="388" y="569"/>
         </scene>
     </scenes>
 </document>

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		42C1EC2C1C3F4E44002E07AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC2B1C3F4E44002E07AB /* AppDelegate.swift */; };
-		42C1EC2E1C3F4E44002E07AB /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC2D1C3F4E44002E07AB /* GameScene.sks */; };
 		42C1EC301C3F4E44002E07AB /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC2F1C3F4E44002E07AB /* GameScene.swift */; };
 		42C1EC321C3F4E44002E07AB /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC311C3F4E44002E07AB /* GameViewController.swift */; };
 		42C1EC351C3F4E44002E07AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC331C3F4E44002E07AB /* Main.storyboard */; };
@@ -29,19 +28,20 @@
 		42C1EC6B1C3F6D71002E07AB /* SKTEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC541C3F6D71002E07AB /* SKTEffects.swift */; };
 		42C1EC6C1C3F6D71002E07AB /* SKTTimingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC551C3F6D71002E07AB /* SKTTimingFunctions.swift */; };
 		42C1EC6D1C3F6D71002E07AB /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C1EC561C3F6D71002E07AB /* Vector3.swift */; };
-		42C1EC6E1C3F6D71002E07AB /* coin.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC591C3F6D71002E07AB /* coin.wav */; };
-		42C1EC6F1C3F6D71002E07AB /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5A1C3F6D71002E07AB /* ding.wav */; };
-		42C1EC701C3F6D71002E07AB /* falling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5B1C3F6D71002E07AB /* falling.wav */; };
-		42C1EC711C3F6D71002E07AB /* flapping.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5C1C3F6D71002E07AB /* flapping.wav */; };
-		42C1EC721C3F6D71002E07AB /* hitGround.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5D1C3F6D71002E07AB /* hitGround.wav */; };
-		42C1EC731C3F6D71002E07AB /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5E1C3F6D71002E07AB /* pop.wav */; };
-		42C1EC741C3F6D71002E07AB /* whack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42C1EC5F1C3F6D71002E07AB /* whack.wav */; };
+		42CB6A081C42FBA200567930 /* foregrounds.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A071C42FBA200567930 /* foregrounds.atlas */; };
+		42CB6A2B1C48510F00567930 /* coin.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A241C48510F00567930 /* coin.wav */; };
+		42CB6A2C1C48510F00567930 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A251C48510F00567930 /* ding.wav */; };
+		42CB6A2D1C48510F00567930 /* falling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A261C48510F00567930 /* falling.wav */; };
+		42CB6A2E1C48510F00567930 /* flapping.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A271C48510F00567930 /* flapping.wav */; };
+		42CB6A2F1C48510F00567930 /* hitGround.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A281C48510F00567930 /* hitGround.wav */; };
+		42CB6A301C48510F00567930 /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A291C48510F00567930 /* pop.wav */; };
+		42CB6A311C48510F00567930 /* whack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A2A1C48510F00567930 /* whack.wav */; };
+		42CB6A331C488BE300567930 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CB6A321C488BE300567930 /* iAd.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		42C1EC281C3F4E44002E07AB /* Flappy Turtle Aquarium Adventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flappy Turtle Aquarium Adventure.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C1EC2B1C3F4E44002E07AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		42C1EC2D1C3F4E44002E07AB /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		42C1EC2F1C3F4E44002E07AB /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		42C1EC311C3F4E44002E07AB /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		42C1EC341C3F4E44002E07AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -63,13 +63,15 @@
 		42C1EC541C3F6D71002E07AB /* SKTEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTEffects.swift; sourceTree = "<group>"; };
 		42C1EC551C3F6D71002E07AB /* SKTTimingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTTimingFunctions.swift; sourceTree = "<group>"; };
 		42C1EC561C3F6D71002E07AB /* Vector3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
-		42C1EC591C3F6D71002E07AB /* coin.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = coin.wav; sourceTree = "<group>"; };
-		42C1EC5A1C3F6D71002E07AB /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
-		42C1EC5B1C3F6D71002E07AB /* falling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = falling.wav; sourceTree = "<group>"; };
-		42C1EC5C1C3F6D71002E07AB /* flapping.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flapping.wav; sourceTree = "<group>"; };
-		42C1EC5D1C3F6D71002E07AB /* hitGround.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitGround.wav; sourceTree = "<group>"; };
-		42C1EC5E1C3F6D71002E07AB /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
-		42C1EC5F1C3F6D71002E07AB /* whack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whack.wav; sourceTree = "<group>"; };
+		42CB6A071C42FBA200567930 /* foregrounds.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = foregrounds.atlas; sourceTree = "<group>"; };
+		42CB6A241C48510F00567930 /* coin.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = coin.wav; sourceTree = "<group>"; };
+		42CB6A251C48510F00567930 /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
+		42CB6A261C48510F00567930 /* falling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = falling.wav; sourceTree = "<group>"; };
+		42CB6A271C48510F00567930 /* flapping.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flapping.wav; sourceTree = "<group>"; };
+		42CB6A281C48510F00567930 /* hitGround.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitGround.wav; sourceTree = "<group>"; };
+		42CB6A291C48510F00567930 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
+		42CB6A2A1C48510F00567930 /* whack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whack.wav; sourceTree = "<group>"; };
+		42CB6A321C488BE300567930 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42CB6A331C488BE300567930 /* iAd.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +89,7 @@
 		42C1EC1F1C3F4E44002E07AB = {
 			isa = PBXGroup;
 			children = (
+				42CB6A321C488BE300567930 /* iAd.framework */,
 				42C1EC2A1C3F4E44002E07AB /* Flappy Turtle Aquarium Adventure */,
 				42C1EC291C3F4E44002E07AB /* Products */,
 			);
@@ -105,9 +109,8 @@
 				42C1EC461C3F6D71002E07AB /* Resources */,
 				42C1EC411C3F6C10002E07AB /* Scenes */,
 				42C1EC2B1C3F4E44002E07AB /* AppDelegate.swift */,
-				42C1EC2D1C3F4E44002E07AB /* GameScene.sks */,
-				42C1EC2F1C3F4E44002E07AB /* GameScene.swift */,
 				42C1EC311C3F4E44002E07AB /* GameViewController.swift */,
+				42C1EC2F1C3F4E44002E07AB /* GameScene.swift */,
 				42C1EC331C3F4E44002E07AB /* Main.storyboard */,
 				42C1EC361C3F4E44002E07AB /* Assets.xcassets */,
 				42C1EC381C3F4E44002E07AB /* LaunchScreen.storyboard */,
@@ -137,6 +140,7 @@
 		42C1EC471C3F6D71002E07AB /* Art */ = {
 			isa = PBXGroup;
 			children = (
+				42CB6A071C42FBA200567930 /* foregrounds.atlas */,
 				42C1EC481C3F6D71002E07AB /* backgrounds.atlas */,
 				42C1EC491C3F6D71002E07AB /* sprites.atlas */,
 			);
@@ -165,14 +169,9 @@
 		42C1EC571C3F6D71002E07AB /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				42CB6A221C48510F00567930 /* Background Music */,
+				42CB6A231C48510F00567930 /* Sound Clips */,
 				42C1EC581C3F6D71002E07AB /* .wdmc */,
-				42C1EC591C3F6D71002E07AB /* coin.wav */,
-				42C1EC5A1C3F6D71002E07AB /* ding.wav */,
-				42C1EC5B1C3F6D71002E07AB /* falling.wav */,
-				42C1EC5C1C3F6D71002E07AB /* flapping.wav */,
-				42C1EC5D1C3F6D71002E07AB /* hitGround.wav */,
-				42C1EC5E1C3F6D71002E07AB /* pop.wav */,
-				42C1EC5F1C3F6D71002E07AB /* whack.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -182,6 +181,27 @@
 			children = (
 			);
 			path = .wdmc;
+			sourceTree = "<group>";
+		};
+		42CB6A221C48510F00567930 /* Background Music */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Background Music";
+			sourceTree = "<group>";
+		};
+		42CB6A231C48510F00567930 /* Sound Clips */ = {
+			isa = PBXGroup;
+			children = (
+				42CB6A241C48510F00567930 /* coin.wav */,
+				42CB6A251C48510F00567930 /* ding.wav */,
+				42CB6A261C48510F00567930 /* falling.wav */,
+				42CB6A271C48510F00567930 /* flapping.wav */,
+				42CB6A281C48510F00567930 /* hitGround.wav */,
+				42CB6A291C48510F00567930 /* pop.wav */,
+				42CB6A2A1C48510F00567930 /* whack.wav */,
+			);
+			path = "Sound Clips";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,18 +264,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				42C1EC611C3F6D71002E07AB /* sprites.atlas in Resources */,
-				42C1EC2E1C3F4E44002E07AB /* GameScene.sks in Resources */,
-				42C1EC701C3F6D71002E07AB /* falling.wav in Resources */,
 				42C1EC3A1C3F4E44002E07AB /* LaunchScreen.storyboard in Resources */,
+				42CB6A2D1C48510F00567930 /* falling.wav in Resources */,
 				42C1EC371C3F4E44002E07AB /* Assets.xcassets in Resources */,
-				42C1EC741C3F6D71002E07AB /* whack.wav in Resources */,
 				42C1EC351C3F4E44002E07AB /* Main.storyboard in Resources */,
-				42C1EC711C3F6D71002E07AB /* flapping.wav in Resources */,
-				42C1EC6E1C3F6D71002E07AB /* coin.wav in Resources */,
-				42C1EC731C3F6D71002E07AB /* pop.wav in Resources */,
-				42C1EC6F1C3F6D71002E07AB /* ding.wav in Resources */,
-				42C1EC721C3F6D71002E07AB /* hitGround.wav in Resources */,
+				42CB6A311C48510F00567930 /* whack.wav in Resources */,
 				42C1EC431C3F6C44002E07AB /* Level1.sks in Resources */,
+				42CB6A2E1C48510F00567930 /* flapping.wav in Resources */,
+				42CB6A2B1C48510F00567930 /* coin.wav in Resources */,
+				42CB6A301C48510F00567930 /* pop.wav in Resources */,
+				42CB6A2C1C48510F00567930 /* ding.wav in Resources */,
+				42CB6A2F1C48510F00567930 /* hitGround.wav in Resources */,
+				42CB6A081C42FBA200567930 /* foregrounds.atlas in Resources */,
 				42C1EC601C3F6D71002E07AB /* backgrounds.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,6 +420,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bcappdesigns.Flappy-Turtle-Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"Texture Atlas Maximum Size" = 4096x4096;
 			};
 			name = Debug;
 		};
@@ -413,6 +435,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bcappdesigns.Flappy-Turtle-Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"Texture Atlas Maximum Size" = 4096x4096;
 			};
 			name = Release;
 		};
@@ -435,6 +459,7 @@
 				42C1EC401C3F4E44002E07AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
