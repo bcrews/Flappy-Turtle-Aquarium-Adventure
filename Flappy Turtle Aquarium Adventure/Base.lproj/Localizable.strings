@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  Flappy Turtle Aquarium Adventure
+
+  Created by Bill Crews on 1/18/16.
+  Copyright © 2016 BC App Designs, LLC. All rights reserved.
+*/
+"AchievementsImageName" = "Achievements";
+"LeaderboardImageName" = "Leaderboard";
+"OKImageName" = "OK";
+"ShareImageName" = "Share";
+"GameOverImageName" = "GameOver-Universal";
+"ScoreCardImageName" = "Scorecard-Universal";
+"PlayImageName" = "Play";
+"RateImageName" = "Rate";

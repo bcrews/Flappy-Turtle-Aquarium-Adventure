@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 import iAd
+import GameKit
 
 class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDelegate {
   
@@ -34,7 +35,7 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
         iadBanner.delegate = self
         iadBanner.hidden = true
         skView.addSubview(iadBanner)
-
+      
         skView.presentScene(scene)
       }
       

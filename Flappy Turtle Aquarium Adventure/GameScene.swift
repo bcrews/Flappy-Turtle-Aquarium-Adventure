@@ -8,6 +8,7 @@
 
 import SpriteKit
 import iAd
+import GameKit
 
 //MARK: enum's
 
@@ -42,7 +43,8 @@ protocol GameSceneDelegate {
   func shareString(string: String, url: NSURL, image: UIImage)
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
+
+class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGameCenterControllerDelegate {
   
   // MARK: Constants
   
@@ -71,7 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
   
   // App ID
   let kAppStoreID = 934492427
-  let kLeaderboardID = "grp.com.BCAppDesigns.FlappyTurtleAA"
+  let kLeaderboardID: String = "grp.com.BCAppDesigns.FlappyTurtleAA"
   
   
   // MARK: Variables
@@ -99,6 +101,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
   var playerAngularVelocity: CGFloat = 0.0
   var lastTouchTime: NSTimeInterval = 0
   var lastTouchY: CGFloat = 0.0
+  var gameCenterAchievements = [String: GKAchievement]()  // Achievements Dictionary
+  var achievementPercent:Double = 0
   
   
   // MARK: Sounds
@@ -132,6 +136,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
   // MARK: didMoveToView
   
   override func didMoveToView(view: SKView) {
+    
+    // authenticate Player with Game Center
+    authenticateLocalPlayer()
     
     // Turn off gravity
     physicsWorld.gravity = CGVector(dx: 0, dy: 0)
@@ -191,7 +198,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
       playableStart = size.height - background.size.height
       playableHeight = background.size.height
       
-     // print("Background size: \(background.size)")
+      // print("Background size: \(background.size)")
       
     }
   }
@@ -211,7 +218,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
   func setupPlayer() {
     
     aspectRatio = size.height / size.width
-  //  print("AspectRatio = \(aspectRatio)")
+    //  print("AspectRatio = \(aspectRatio)")
     
     player.position = CGPoint(x: (size.width * 0.20) * aspectRatio, y: playableHeight * 0.4 + playableStart)
     player.zPosition = Layer.Player.rawValue
@@ -279,6 +286,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
   
   func setupPlayerHat() {
     
+    let playerHat = SKSpriteNode(imageNamed: "hat-christmas")
     playerHat.position = CGPoint(x: 95 - playerHat.size.width/2, y: 128 - playerHat.size.height/2)
     player.addChild(playerHat)
     
@@ -310,9 +318,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     
     if score > bestScore() {
       setBestScore(score)
+      
+      // update GameCenter
+      self.saveHighScore(kLeaderboardID, score: bestScore())
     }
     
-    let scorecard = SKSpriteNode(imageNamed: "ScoreCard-Universal")
+    let scorecard = SKSpriteNode(imageNamed: NSLocalizedString("ScoreCardImageName", comment: "ScoreCard Image Name"))
     scorecard.position = CGPoint(x: size.width * 0.5, y: size.height * 0.60)
     scorecard.xScale *= 1.0 / aspectRatio
     scorecard.yScale *= 1.0 / aspectRatio
@@ -354,7 +365,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     scorecard.addChild(bestScoreLabelOutline)
     
     
-    let gameOver = SKSpriteNode(imageNamed: "GameOver-Universal")
+    let gameOver = SKSpriteNode(imageNamed: NSLocalizedString("GameOverImageName", comment: "Game Over Image Name"))
     gameOver.position = CGPoint(x: size.width/2, y: size.height/2 + scorecard.size.height/2 + 275 + gameOver.size.height/2)
     gameOver.xScale *= aspectRatio
     gameOver.yScale *= aspectRatio
@@ -370,7 +381,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     okButton.name = "okButton"
     worldNode.addChild(okButton)
     
-    let ok = SKSpriteNode(imageNamed: "OK")
+    let ok = SKSpriteNode(imageNamed: NSLocalizedString("OKImageName", comment: "OK Image Name"))
     ok.position = CGPoint.zero
     ok.zPosition = Layer.UI.rawValue
     ok.name = "okLabel"
@@ -385,12 +396,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     shareButton.name = "shareButton"
     worldNode.addChild(shareButton)
     
-    let share = SKSpriteNode(imageNamed: "Share")
+    let share = SKSpriteNode(imageNamed: NSLocalizedString("ShareImageName", comment: "Share Image Name"))
     share.position = CGPoint.zero
     share.zPosition = Layer.UI.rawValue
     share.name = "shareLabel"
     shareButton.addChild(share)
     
+    
+    // Game Center buttons Achievements & Leaderboards
+    
+    let achievementsButton = SKSpriteNode(imageNamed: "Button")
+    achievementsButton.xScale *= aspectRatio
+    achievementsButton.yScale *= aspectRatio
+    achievementsButton.position = CGPoint(x: size.width/2 - scorecard.size.width/2 + okButton.size.width/2,
+      y: size.height/2 - scorecard.size.height/2 - (kMargin * 11) - okButton.size.height/2)
+    achievementsButton.zPosition = Layer.UI.rawValue
+    achievementsButton.name = "achievementsButton"
+    worldNode.addChild(achievementsButton)
+    
+    let achievements = SKSpriteNode(imageNamed: NSLocalizedString("AchievementsImageName",comment: "Achievements Image Name"))
+    achievements.position = CGPoint.zero
+    achievements.zPosition = Layer.UI.rawValue
+    achievements.name = "achievements"
+    achievementsButton.addChild(achievements)
+    
+    let leaderboardButton = SKSpriteNode(imageNamed: "Button")
+    leaderboardButton.xScale *= aspectRatio
+    leaderboardButton.yScale *= aspectRatio
+    leaderboardButton.position = CGPoint(x: size.width/2 + scorecard.size.width/2 - shareButton.size.width/2,
+      y: size.height/2 - scorecard.size.height/2 - (kMargin * 11) - shareButton.size.height/2)
+    leaderboardButton.zPosition = Layer.UI.rawValue
+    leaderboardButton.name = "leaderboardButton"
+    worldNode.addChild(leaderboardButton)
+    
+    let leaderboard = SKSpriteNode(imageNamed: NSLocalizedString("LeaderboardImageName", comment: "Leaderboard Image Name"))
+    leaderboard.position = CGPoint.zero
+    leaderboard.zPosition = Layer.UI.rawValue
+    leaderboard.name = "leaderboard"
+    leaderboardButton.addChild(leaderboard)
+
     
     // Adding some ScoreCard Animations
     
@@ -420,12 +464,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     // Fade in Buttons
     okButton.alpha = 0
     shareButton.alpha = 0
+    achievementsButton.alpha = 0
+    leaderboardButton.alpha = 0
+    
     let fadeIn = SKAction.sequence([
       SKAction.waitForDuration(kAnimDelay * 3),
       SKAction.fadeInWithDuration(kAnimDelay * 1.5)
       ])
     okButton.runAction(fadeIn)
     shareButton.runAction(fadeIn)
+    achievementsButton.runAction(fadeIn)
+    leaderboardButton.runAction(fadeIn)
     
     // Play animation sounds
     let pops = SKAction.sequence([
@@ -494,7 +543,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     playButton.name = "playButton"
     worldNode.addChild(playButton)
     
-    let playLabel = SKSpriteNode(imageNamed: "Play")
+    let playLabel = SKSpriteNode(imageNamed: NSLocalizedString("PlayImageName", comment: "Play Image Name"))
     playLabel.position = CGPoint.zero
     playLabel.name = "playLabel"
     playButton.addChild(playLabel)
@@ -507,7 +556,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     rateButton.name = "rateButton"
     worldNode.addChild(rateButton)
     
-    let rateLabel = SKSpriteNode(imageNamed: "Rate")
+    let rateLabel = SKSpriteNode(imageNamed: NSLocalizedString("RateImageName", comment: "Rate Image Name"))
     rateLabel.position = CGPoint.zero
     rateLabel.name = "rateLabel"
     rateButton.addChild(rateLabel)
@@ -526,7 +575,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
       moveUp, moveDown
       ])), withKey: "playerBounce")
     
-}
+  }
   
   
   func setupPlayerAnimation() {
@@ -785,7 +834,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
         if touchedNode.name == "rateButton" || touchedNode.name == "rateLabel" {
           rateApp()
         }
-        
         break
       case .Tutorial:
         switchToPlay()
@@ -803,6 +851,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
         }
         if touchedNode.name == "shareButton" || touchedNode.name == "shareLabel" {
           shareScore()
+        }
+        if touchedNode.name == "achievementsButton" || touchedNode.name == "achievements" {
+          showGameCenter("Achievements")
+        }
+        if touchedNode.name == "leaderboardButton" || touchedNode.name == "leaderboard" {
+          showGameCenter("Leaderboards")
         }
         break
       }
@@ -857,7 +911,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     let velocityStep = playerVelocity * CGFloat(dt)
     player.position += velocityStep
     player.position = CGPoint(x: player.position.x, y: min(player.position.y, size.height))
-   
+    
     if player.position.y < lastTouchY {
       playerAngularVelocity = -kAngularVelocity.degreesToRadians()
     }
@@ -866,7 +920,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     let angularStep = playerAngularVelocity * CGFloat(dt)
     player.zRotation += angularStep
     player.zRotation = min(max(player.zRotation, kMinDegrees.degreesToRadians()), kMaxDegrees.degreesToRadians())
-   
+    
   }
   
   func updateForeground() {
@@ -939,6 +993,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
           self.scoreLabelBackground.text = "\(self.score)"
           self.runAction(self.coinAction)
           obstacle.userData?["Passed"] = NSNumber(bool: true)
+          self.checkIfAchievementEarned()
         }
       }
     })
@@ -1007,7 +1062,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     setupBackground()
     setupForeground()
     setupPlayer()
-    //setupPlayerHat()
+  //  setupPlayerHat()
     setupMainMenu()
     setupPlayerAnimation()
     
@@ -1016,7 +1071,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
   func switchToTutorial() {
     
     gameState = .Tutorial
-        
+    
     setupBackground()
     setupForeground()
     //setupPlayer()
@@ -1103,6 +1158,243 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
   }
   
   
+  // MARK: Game Center
+  
+  func authenticateLocalPlayer() {
+    
+    let localPlayer = GKLocalPlayer.localPlayer()
+    
+    localPlayer.authenticateHandler = { (viewController, error ) -> Void in
+      
+      if (viewController != nil) {
+        // If not authenticated, popup view controller to log into Game Center
+        let vc:UIViewController = self.view!.window!.rootViewController!
+        vc.presentViewController(viewController!, animated: true, completion: nil)
+      } else {
+        print("Authentication is \(GKLocalPlayer.localPlayer().authenticated) ")
+        // do something based on the player being logged in.
+        
+        self.gameCenterAchievements.removeAll()
+        self.loadAchievementPercentages()
+        
+      }
+    }
+    
+  }
+  
+  func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController) {
+    
+    gameCenterViewController.dismissViewControllerAnimated(true, completion: nil)
+    
+    gameCenterAchievements.removeAll()
+    loadAchievementPercentages()
+    
+  }
+  
+  func showGameCenter(viewState: String = "") {
+    
+    let gameCenterViewController = GKGameCenterViewController()
+    
+    gameCenterViewController.gameCenterDelegate = self
+
+    // options for what to initially show...
+    if viewState == "Achievements" {
+      gameCenterViewController.viewState = GKGameCenterViewControllerState.Achievements
+    } else if viewState == "Leaderboards" {
+      gameCenterViewController.leaderboardIdentifier = kLeaderboardID
+      gameCenterViewController.viewState = GKGameCenterViewControllerState.Leaderboards
+    }
+    
+    let vc:UIViewController = self.view!.window!.rootViewController!
+    vc.presentViewController(gameCenterViewController, animated: true, completion: nil)
+    
+  }
+  
+  func saveHighScore(identifier: String, score: Int) {
+    
+    if (GKLocalPlayer.localPlayer().authenticated) {
+      
+      let scoreReporter = GKScore(leaderboardIdentifier: identifier)
+      
+      scoreReporter.value = Int64(score)
+      
+      scoreReporter.shouldSetDefaultLeaderboard = true
+      
+      let scoreArray:[GKScore] = [scoreReporter]
+      
+      GKScore.reportScores(scoreArray, withCompletionHandler: {
+        
+        error -> Void in
+        
+        if (error != nil) {
+          print("\(error)")
+        } else {
+          
+          print("Posted score of \(score)")
+          // From here you can do anything else to tell the user they posted a high score
+        }
+      })
+      
+    }
+  }
+  
+  func loadAchievementPercentages() {
+    
+    print("getting percentage of past achievements")
+    GKAchievement.loadAchievementsWithCompletionHandler({ (allAchievements, error) -> Void in
+      
+      if error != nil {
+        print("Game center could not load achievements, the error is \(error)")
+      } else {
+        // this could be nil if there was no progress on any achievements thus far
+        if (allAchievements != nil) {
+          
+          for theAchievement in allAchievements! {
+            
+            if let singleAchievement:GKAchievement = theAchievement {
+              self.gameCenterAchievements[singleAchievement.identifier!] = singleAchievement
+            }
+          }
+          
+          for (id, achievement) in self.gameCenterAchievements {
+            print("\(id) - \(achievement.percentComplete)")
+          }
+        }
+      }
+    })
+    
+  }
+  
+  func incrementCurrentPercentOfAchievement(identifier: String, amount: Double) {
+    
+    if GKLocalPlayer.localPlayer().authenticated {
+      
+      var currentPercentFound:Bool = false
+      
+      if (gameCenterAchievements.count != 0) {
+        
+        for (id, achievement) in gameCenterAchievements {
+          
+          if (id == identifier) {
+            
+            currentPercentFound = true
+            
+            var currentPercent:Double = achievement.percentComplete
+            currentPercent = currentPercent + amount
+            
+            reportAchievement(identifier, percentComplete:currentPercent)
+            break
+          }
+        }
+      }
+      
+      if (currentPercentFound == false) {
+        
+        reportAchievement(identifier, percentComplete: amount)
+        
+      }
+      
+    }
+  }
+  
+  func reportAchievement(identifier: String, percentComplete: Double) {
+    
+    let achievement = GKAchievement(identifier: identifier)
+    
+    achievement.percentComplete = percentComplete
+   
+    achievement.showsCompletionBanner = true
+    
+    let achievementArray:[GKAchievement] = [achievement]
+    
+    GKAchievement.reportAchievements(achievementArray, withCompletionHandler: {
+      
+      error -> Void in
+      
+      if ( error != nil) {
+        print("\(error)")
+      } else {
+        
+        print("reported achievement with percent complete of \(percentComplete)")
+        
+        self.gameCenterAchievements.removeAll()
+        self.loadAchievementPercentages()
+      }
+      
+    })
+    
+  }
+  
+  func clearAchievementsInGameCenter() {
+    
+    GKAchievement.resetAchievementsWithCompletionHandler({
+      (error) -> Void in
+      
+      if (error != nil ) {
+        print("\(error)")
+      } else {
+        
+        print("clearing all achievements in Game Center")
+        self.gameCenterAchievements.removeAll()
+      
+      }
+    })
+    
+  }
+  
+  func checkIfAchievementEarned() {
+    
+    if (self.score > 0 && self.score <= kHappyHatchlingAchievementPoints) {
+      achievementPercent = Double(CGFloat(self.score) / CGFloat(kHappyHatchlingAchievementPoints) * 100)
+      reportAchievement(kHappyHatchlingAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kHappyHatchlingAchievementPoints && self.score <= kFlappingFlippersAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kHappyHatchlingAchievementPoints)) / CGFloat(kFlappingFlippersAchievementPoints - kHappyHatchlingAchievementPoints) * 100)
+      reportAchievement(kFlappingFlippersAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kFlappingFlippersAchievementPoints && self.score <= kClappingClamsAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kFlappingFlippersAchievementPoints)) / CGFloat(kClappingClamsAchievementPoints - kFlappingFlippersAchievementPoints) * 100)
+      reportAchievement(kClappingClamsAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kClappingClamsAchievementPoints && self.score <= kBubbleBusterAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kClappingClamsAchievementPoints)) / CGFloat(kBubbleBusterAchievementPoints - kClappingClamsAchievementPoints) * 100)
+      reportAchievement(kBubbleBusterAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kBubbleBusterAchievementPoints && self.score <= kStarfishSurpriseAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kBubbleBusterAchievementPoints)) / CGFloat(kStarfishSurpriseAchievementPoints - kBubbleBusterAchievementPoints) * 100)
+      reportAchievement(kStarfishSurpriseAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kStarfishSurpriseAchievementPoints && self.score <= kJellyfishSandwichAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kStarfishSurpriseAchievementPoints)) / CGFloat(kJellyfishSandwichAchievementPoints - kStarfishSurpriseAchievementPoints) * 100)
+      reportAchievement(kJellyfishSandwichAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kJellyfishSandwichAchievementPoints && self.score <= kEACRiderAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kJellyfishSandwichAchievementPoints)) / CGFloat(kEACRiderAchievementPoints - kJellyfishSandwichAchievementPoints) * 100)
+      reportAchievement(kEACRiderAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kEACRiderAchievementPoints && self.score <= kSuperSheldonAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kEACRiderAchievementPoints)) / CGFloat(kSuperSheldonAchievementPoints - kEACRiderAchievementPoints) * 100)
+      reportAchievement(kSuperSheldonAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kSuperSheldonAchievementPoints && self.score <= kRayRunnerAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kSuperSheldonAchievementPoints)) / CGFloat(kRayRunnerAchievementPoints - kSuperSheldonAchievementPoints) * 100)
+      reportAchievement(kRayRunnerAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kRayRunnerAchievementPoints && self.score <= kDancingDaphneAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kRayRunnerAchievementPoints)) / CGFloat(kDancingDaphneAchievementPoints - kRayRunnerAchievementPoints) * 100)
+      reportAchievement(kDancingDaphneAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kDancingDaphneAchievementPoints && self.score <= kInkingOllieAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kDancingDaphneAchievementPoints)) / CGFloat(kInkingOllieAchievementPoints - kDancingDaphneAchievementPoints) * 100)
+      reportAchievement(kInkingOllieAchievementId, percentComplete: achievementPercent)
+    }
+    if (self.score > kInkingOllieAchievementPoints && self.score <= kSharkAlleyAchievementPoints) {
+      achievementPercent = Double((CGFloat(self.score) - CGFloat(kInkingOllieAchievementPoints)) / CGFloat(kSharkAlleyAchievementPoints - kInkingOllieAchievementPoints) * 100)
+      reportAchievement(kSharkAlleyAchievementId, percentComplete: achievementPercent)
+    }
+    
+  }
+  
   // MARK: Date Calculations
   
   func howManyDaysUntil(end: String, start: NSDate = NSDate()) -> Int {
@@ -1112,7 +1404,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     
     let dateFormatter = NSDateFormatter()
     dateFormatter.dateFormat = "MM-dd-yyyy"
-        
+    
     // let startDate:NSDate = dateFormatter.dateFromString(start)!
     let endDate:NSDate = dateFormatter.dateFromString(end)!
     
@@ -1129,5 +1421,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate {
     
     return components.day
   }
-
+  
 }

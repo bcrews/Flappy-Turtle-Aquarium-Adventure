@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -37,6 +37,10 @@
 		42CB6A301C48510F00567930 /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A291C48510F00567930 /* pop.wav */; };
 		42CB6A311C48510F00567930 /* whack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A2A1C48510F00567930 /* whack.wav */; };
 		42CB6A331C488BE300567930 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CB6A321C488BE300567930 /* iAd.framework */; };
+		42CE74C71C4A24E700ACC89A /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CE74C61C4A24E700ACC89A /* GameKit.framework */; };
+		42E515741C4B6BFF007B9494 /* HelperAchivementFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E515731C4B6BFF007B9494 /* HelperAchivementFiles.swift */; };
+		42E5157D1C4DF093007B9494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42E5157F1C4DF093007B9494 /* Localizable.strings */; };
+		42E515921C4E2246007B9494 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42E515911C4E2246007B9494 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +51,6 @@
 		42C1EC341C3F4E44002E07AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		42C1EC361C3F4E44002E07AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42C1EC391C3F4E44002E07AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		42C1EC3B1C3F4E44002E07AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42C1EC421C3F6C44002E07AB /* Level1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1.sks; sourceTree = "<group>"; };
 		42C1EC481C3F6D71002E07AB /* backgrounds.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = backgrounds.atlas; sourceTree = "<group>"; };
 		42C1EC491C3F6D71002E07AB /* sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = sprites.atlas; sourceTree = "<group>"; };
@@ -72,6 +75,20 @@
 		42CB6A291C48510F00567930 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
 		42CB6A2A1C48510F00567930 /* whack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whack.wav; sourceTree = "<group>"; };
 		42CB6A321C488BE300567930 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		42CE74C61C4A24E700ACC89A /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		42E515731C4B6BFF007B9494 /* HelperAchivementFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperAchivementFiles.swift; sourceTree = "<group>"; };
+		42E515751C4DBAF7007B9494 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Main.strings"; sourceTree = "<group>"; };
+		42E515761C4DBAF7007B9494 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		42E515771C4DBB04007B9494 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		42E515781C4DBB04007B9494 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		42E515791C4DBB11007B9494 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		42E5157A1C4DBB11007B9494 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		42E5157E1C4DF093007B9494 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		42E515801C4DF0A9007B9494 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		42E515811C4DF0AB007B9494 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		42E515821C4DF0AD007B9494 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		42E515831C4DF0AE007B9494 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		42E515911C4E2246007B9494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +97,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CB6A331C488BE300567930 /* iAd.framework in Frameworks */,
+				42CE74C71C4A24E700ACC89A /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +107,7 @@
 		42C1EC1F1C3F4E44002E07AB = {
 			isa = PBXGroup;
 			children = (
+				42CE74C61C4A24E700ACC89A /* GameKit.framework */,
 				42CB6A321C488BE300567930 /* iAd.framework */,
 				42C1EC2A1C3F4E44002E07AB /* Flappy Turtle Aquarium Adventure */,
 				42C1EC291C3F4E44002E07AB /* Products */,
@@ -106,6 +125,7 @@
 		42C1EC2A1C3F4E44002E07AB /* Flappy Turtle Aquarium Adventure */ = {
 			isa = PBXGroup;
 			children = (
+				42CE74C31C4A1F3900ACC89A /* GameKit */,
 				42C1EC461C3F6D71002E07AB /* Resources */,
 				42C1EC411C3F6C10002E07AB /* Scenes */,
 				42C1EC2B1C3F4E44002E07AB /* AppDelegate.swift */,
@@ -114,7 +134,8 @@
 				42C1EC331C3F4E44002E07AB /* Main.storyboard */,
 				42C1EC361C3F4E44002E07AB /* Assets.xcassets */,
 				42C1EC381C3F4E44002E07AB /* LaunchScreen.storyboard */,
-				42C1EC3B1C3F4E44002E07AB /* Info.plist */,
+				42E5157F1C4DF093007B9494 /* Localizable.strings */,
+				42E515911C4E2246007B9494 /* Info.plist */,
 			);
 			path = "Flappy Turtle Aquarium Adventure";
 			sourceTree = "<group>";
@@ -204,6 +225,14 @@
 			path = "Sound Clips";
 			sourceTree = "<group>";
 		};
+		42CE74C31C4A1F3900ACC89A /* GameKit */ = {
+			isa = PBXGroup;
+			children = (
+				42E515731C4B6BFF007B9494 /* HelperAchivementFiles.swift */,
+			);
+			name = GameKit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -237,16 +266,24 @@
 					42C1EC271C3F4E44002E07AB = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = N6QSYL24TV;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
 			buildConfigurationList = 42C1EC231C3F4E44002E07AB /* Build configuration list for PBXProject "Flappy Turtle Aquarium Adventure" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"es-MX",
+				ru,
+				fr,
 			);
 			mainGroup = 42C1EC1F1C3F4E44002E07AB;
 			productRefGroup = 42C1EC291C3F4E44002E07AB /* Products */;
@@ -263,6 +300,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42E515921C4E2246007B9494 /* Info.plist in Resources */,
 				42C1EC611C3F6D71002E07AB /* sprites.atlas in Resources */,
 				42C1EC3A1C3F4E44002E07AB /* LaunchScreen.storyboard in Resources */,
 				42CB6A2D1C48510F00567930 /* falling.wav in Resources */,
@@ -273,6 +311,7 @@
 				42CB6A2E1C48510F00567930 /* flapping.wav in Resources */,
 				42CB6A2B1C48510F00567930 /* coin.wav in Resources */,
 				42CB6A301C48510F00567930 /* pop.wav in Resources */,
+				42E5157D1C4DF093007B9494 /* Localizable.strings in Resources */,
 				42CB6A2C1C48510F00567930 /* ding.wav in Resources */,
 				42CB6A2F1C48510F00567930 /* hitGround.wav in Resources */,
 				42CB6A081C42FBA200567930 /* foregrounds.atlas in Resources */,
@@ -300,6 +339,7 @@
 				42C1EC691C3F6D71002E07AB /* SKNode+Extensions.swift in Sources */,
 				42C1EC6A1C3F6D71002E07AB /* SKTAudio.swift in Sources */,
 				42C1EC621C3F6D71002E07AB /* CGFloat+Extensions.swift in Sources */,
+				42E515741C4B6BFF007B9494 /* HelperAchivementFiles.swift in Sources */,
 				42C1EC6D1C3F6D71002E07AB /* Vector3.swift in Sources */,
 				42C1EC2C1C3F4E44002E07AB /* AppDelegate.swift in Sources */,
 			);
@@ -312,6 +352,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				42C1EC341C3F4E44002E07AB /* Base */,
+				42E515751C4DBAF7007B9494 /* es-MX */,
+				42E515771C4DBB04007B9494 /* ru */,
+				42E515791C4DBB11007B9494 /* fr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -320,8 +363,23 @@
 			isa = PBXVariantGroup;
 			children = (
 				42C1EC391C3F4E44002E07AB /* Base */,
+				42E515761C4DBAF7007B9494 /* es-MX */,
+				42E515781C4DBB04007B9494 /* ru */,
+				42E5157A1C4DBB11007B9494 /* fr */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		42E5157F1C4DF093007B9494 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42E5157E1C4DF093007B9494 /* Base */,
+				42E515801C4DF0A9007B9494 /* en */,
+				42E515811C4DF0AB007B9494 /* es-MX */,
+				42E515821C4DF0AD007B9494 /* ru */,
+				42E515831C4DF0AE007B9494 /* fr */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -415,11 +473,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				INFOPLIST_FILE = "Flappy Turtle Aquarium Adventure/Info.plist";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "$(SRCROOT)/info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bcappdesigns.Flappy-Turtle-Aquarium-Adventure";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.BCAppDesigns.Flappy-Turtle---Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				"Texture Atlas Maximum Size" = 4096x4096;
 			};
@@ -430,11 +490,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				INFOPLIST_FILE = "Flappy Turtle Aquarium Adventure/Info.plist";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "$(SRCROOT)/info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bcappdesigns.Flappy-Turtle-Aquarium-Adventure";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.BCAppDesigns.Flappy-Turtle---Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				"Texture Atlas Maximum Size" = 4096x4096;
 			};
