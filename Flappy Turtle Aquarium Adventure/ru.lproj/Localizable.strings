@@ -6,3 +6,15 @@
   Copyright © 2016 BC App Designs, LLC. All rights reserved.
 */
 "AchievementsImageName" = "Achievements_RU";
+"LeaderboardImageName" = "Leaderboard_RU";
+"OKImageName" = "OK_RU";
+"ShareImageName" = "Share_RU";
+"GameOverImageName" = "GameOver-Universal_RU";
+"ScoreCardImageName" = "Scorecard-Universal_RU";
+"PlayImageName" = "Play_RU";
+"RateImageName" = "Rate_RU";
+"LogoImageName" = "Logo-Universal_RU";
+"ReadyImageName" = "Ready-Universal_RU";
+"TutorialImageName" = "Tutorial-Universal_RU";
+"ShareText_1" = "Вау! Я просто забил";
+"ShareText_2" = "точки в Flappy Черепаха: Аквариум Приключения!\n ";

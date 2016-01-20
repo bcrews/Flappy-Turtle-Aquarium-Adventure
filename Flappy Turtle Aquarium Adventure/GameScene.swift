@@ -492,14 +492,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func setupTutorial() {
     
-    let ready = SKSpriteNode(imageNamed: "Ready-Universal")
+    let ready = SKSpriteNode(imageNamed: NSLocalizedString("ReadyImageName", comment: "Ready Image Name"))
     ready.setScale(2.0)
     ready.position = CGPoint(x: size.width * 0.5, y: playableHeight * 0.75 + playableStart)
     ready.name = "Tutorial"
     ready.zPosition = Layer.UI.rawValue
     worldNode.addChild(ready)
     
-    let tutorial = SKSpriteNode(imageNamed: "Tutorial-Universal")
+    let tutorial = SKSpriteNode(imageNamed: NSLocalizedString("TutorialImageName", comment: "Tutorial Image Name"))
     tutorial.setScale(2.5)
     tutorial.position = CGPoint(x: size.width * 0.5, y: playableHeight * 0.4 + playableStart)
     tutorial.name = "Tutorial"
@@ -528,7 +528,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func setupMainMenu() {
     
-    let logo = SKSpriteNode(imageNamed: "Logo-Universal")
+    let logo = SKSpriteNode(imageNamed: NSLocalizedString("LogoImageName", comment: "Logo Image Name"))
     logo.setScale(2.0)
     logo.position = CGPoint(x: size.width/2, y: size.height * 0.8)
     logo.zPosition = Layer.UI.rawValue
@@ -1130,7 +1130,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     // Use delegate to get a screen shot
     let screenShot = gameSceneDelegate.screenShot()
     // Text we want to share
-    let initialTextString = "Wow! I just scored \(score) points in Flappy Turtle: Aquarium Adventure!\n "
+    let string1 = NSLocalizedString("ShareText_1", comment: "Share text localized 1st part")
+    let string2 = " \(score) " + NSLocalizedString("ShareText_2", comment: "Share text localized 2nd part")
+    let initialTextString = string1 + string2
     gameSceneDelegate.shareString(initialTextString, url: url!, image: screenShot)
     
   }

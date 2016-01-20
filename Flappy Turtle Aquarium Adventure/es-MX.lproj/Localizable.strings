@@ -13,3 +13,8 @@
 "ScoreCardImageName" = "Scorecard-Universal_SP";
 "PlayImageName" = "Play_SP";
 "RateImageName" = "Rate_SP";
+"LogoImageName" = "Logo-Universal_SP";
+"ReadyImageName" = "Ready-Universal_SP";
+"TutorialImageName" = "Tutorial-Universal_SP";
+"ShareText_1" = "¡Guauu! Me acaba de marcar";
+"ShareText_2" = "puntos en Flappy Tortuga: Acuario Adventure!\n ";

@@ -13,3 +13,8 @@
 "ScoreCardImageName" = "Scorecard-Universal";
 "PlayImageName" = "Play";
 "RateImageName" = "Rate";
+"LogoImageName" = "Logo-Universal";
+"ReadyImageName" = "Ready-Universal";
+"TutorialImageName" = "Tutorial-Universal";
+"ShareText_1" = "Wow! I just scored";
+"ShareText_2" = "points in Flappy Turtle: Aquarium Adventure!\n ";

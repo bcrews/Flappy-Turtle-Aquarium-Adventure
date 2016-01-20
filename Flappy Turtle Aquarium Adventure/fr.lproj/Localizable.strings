@@ -6,3 +6,15 @@
   Copyright © 2016 BC App Designs, LLC. All rights reserved.
 */
 "AchievementsImageName" = "Achievements_FR";
+"LeaderboardImageName" = "Leaderboard_FR";
+"OKImageName" = "OK_FR";
+"ShareImageName" = "Share_FR";
+"GameOverImageName" = "GameOver-Universal_FR";
+"ScoreCardImageName" = "Scorecard-Universal_FR";
+"PlayImageName" = "Play_FR";
+"RateImageName" = "Rate_FR";
+"LogoImageName" = "Logo-Universal_FR";
+"ReadyImageName" = "Ready-Universal_FR";
+"TutorialImageName" = "Tutorial-Universal_FR";
+"ShareText_1" = "Hou la la! Je viens marqué";
+"ShareText_2" = "points Flappy Tortue: Aquarium aventure!\n ";
