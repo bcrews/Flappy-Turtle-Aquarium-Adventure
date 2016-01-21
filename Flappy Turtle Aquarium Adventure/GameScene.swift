@@ -49,18 +49,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   // MARK: Constants
   
   var Gravity: CGFloat = -1500.0
-  let kImpluse: CGFloat =  600.0
+  var kImpluse: CGFloat =  600.0
   let kNumBackgrounds = 4
   let kNumForegrounds = 2
-  let kNumTopObstacles = 23
+  let kNumTopObstacles = 24
   let kNumBottomObstacles = 0  // not used in this version
-  let kGroundSpeed: CGFloat = 300.0 // 150.0
-  let kBackgroundSpeed: CGFloat = 50.0
+  var kGroundSpeed: CGFloat = 300.0 // 150.0
+  var kBackgroundSpeed: CGFloat = 50.0
   let kBottomObstacleMinFraction: CGFloat = 0.05 // 5%
   let kBottomObstacleMaxFraction: CGFloat = 0.585 // 58.5%
-  let kGapMultiplier: CGFloat = 1.50
+  var kGapMultiplier: CGFloat = 1.50
   let kFirstSpawnDelay: NSTimeInterval = 1.75
-  let kEverySpawnDelay: NSTimeInterval = 2.5  // 4.75
+  var kEverySpawnDelay: NSTimeInterval = 2.5  // 4.75
   let kFontName = "AmericanTypewriter-Bold"
   let kScoreFontSize: CGFloat = 110
   let kMargin: CGFloat = 24.0
@@ -69,7 +69,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   let kNumTopObstacleFrames = 24
   let kMinDegrees: CGFloat = -90
   let kMaxDegrees: CGFloat =  12
-  let kAngularVelocity: CGFloat = 200.0
+  var kAngularVelocity: CGFloat = 200.0
   
   // App ID
   let kAppStoreID = 934492427
@@ -598,13 +598,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     for i in 0..<kNumTopObstacleFrames {
       textures.append(SKTexture(imageNamed: "JellyFish_Universal_\(i)"))
     }
-    for i in kNumTopObstacleFrames.stride(through: 0, by: -1) {
+    for i in (kNumTopObstacleFrames - 1).stride(through: 0, by: -1) {
       textures.append(SKTexture(imageNamed: "JellyFish_Universal_\(i)"))
     }
     
-    let topObstacleAnimation = SKAction.animateWithTextures(textures, timePerFrame: 0.07)
+    let topObstacleAnimation = SKAction.animateWithTextures(textures, timePerFrame: 0.05)
     topObstacle.runAction(SKAction.repeatActionForever(topObstacleAnimation))
   }
+  
   
   // MARK: Gameplay
   
@@ -616,6 +617,86 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     sprite.userData = NSMutableDictionary()
     
     return sprite
+  }
+  
+  func createTopObstacle() -> SKSpriteNode {
+    
+    let texture = SKTexture(imageNamed: "JellyFish_Universal_0")
+    topObstacle = SKSpriteNode(texture: texture)
+    topObstacle.userData = NSMutableDictionary()
+    topObstacle.zPosition = Layer.Obstacle.rawValue
+    
+    let offsetX_2 = topObstacle.size.width * topObstacle.anchorPoint.x
+    let offsetY_2 = topObstacle.size.height * topObstacle.anchorPoint.y
+    
+    let path_2 = CGPathCreateMutable()
+    
+    CGPathMoveToPoint(path_2, nil, 69 - offsetX_2, 713 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 30 - offsetX_2, 691 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 8 - offsetX_2, 649 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 16 - offsetX_2, 619 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 38 - offsetX_2, 609 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 40 - offsetX_2, 561 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 34 - offsetX_2, 512 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 35 - offsetX_2, 470 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 37 - offsetX_2, 419 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 41 - offsetX_2, 387 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 60 - offsetX_2, 363 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 27 - offsetX_2, 342 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 9 - offsetX_2, 316 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 7 - offsetX_2, 278 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 34 - offsetX_2, 264 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 24 - offsetX_2, 208 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 18 - offsetX_2, 153 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 19 - offsetX_2, 116 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 18 - offsetX_2, 66 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 26 - offsetX_2, 34 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 41 - offsetX_2, 37 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 59 - offsetX_2, 10 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 72 - offsetX_2, 47 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 90 - offsetX_2, 47 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 94 - offsetX_2, 15 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 113 - offsetX_2, 34 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 120 - offsetX_2, 53 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 50 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 136 - offsetX_2, 59 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 117 - offsetX_2, 148 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 194 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 163 - offsetX_2, 167 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 185 - offsetX_2, 197 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 207 - offsetX_2, 171 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 230 - offsetX_2, 199 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 247 - offsetX_2, 220 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 236 - offsetX_2, 277 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 226 - offsetX_2, 303 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 231 - offsetX_2, 341 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 237 - offsetX_2, 381 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 225 - offsetX_2, 424 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 246 - offsetX_2, 439 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 224 - offsetX_2, 496 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 173 - offsetX_2, 520 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 142 - offsetX_2, 528 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 608 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 152 - offsetX_2, 617 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 149 - offsetX_2, 660 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 129 - offsetX_2, 693 - offsetY_2)
+    CGPathAddLineToPoint(path_2, nil, 99 - offsetX_2, 710 - offsetY_2)
+    
+    CGPathCloseSubpath(path_2)
+    
+    topObstacle.physicsBody = SKPhysicsBody(polygonFromPath: path_2)
+    topObstacle.physicsBody?.categoryBitMask = PhysicsCategory.Obstacle
+    topObstacle.physicsBody?.collisionBitMask = 0
+    topObstacle.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+    
+    topObstacle.name = "topObstacle"
+    
+    setupTopObstacleAnimation()
+    
+    worldNode.addChild(topObstacle)
+
+    return topObstacle
+    
   }
   
   func spawnObstacle() {
@@ -685,77 +766,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     
     worldNode.addChild(bottomObstacle)
     
-    let topObstacle = createObstacle("JellyFish_Universal_0")
-    topObstacle.position = CGPoint(x: startX, y: bottomObstacle.position.y + bottomObstacle.size.height/2 + topObstacle.size.height/2 + player.size.height * kGapMultiplier)
+    
+    topObstacle = createTopObstacle()
+    
+    
+    //let topObstacle = createObstacle("JellyFish_Universal_0")
+     topObstacle.position = CGPoint(x: startX, y: bottomObstacle.position.y + bottomObstacle.size.height/2 + topObstacle.size.height/2 + player.size.height * kGapMultiplier)
+    topObstacle.zPosition = Layer.Obstacle.rawValue
     topObstacle.xScale *= size.width / size.height * obstacleScaleFactor
     topObstacle.yScale *= size.width / size.height * obstacleScaleFactor
     
-    let offsetX_2 = topObstacle.size.width * topObstacle.anchorPoint.x
-    let offsetY_2 = topObstacle.size.height * topObstacle.anchorPoint.y
-    
-    let path_2 = CGPathCreateMutable()
-    
-    CGPathMoveToPoint(path_2, nil, 69 - offsetX_2, 713 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 30 - offsetX_2, 691 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 8 - offsetX_2, 649 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 16 - offsetX_2, 619 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 38 - offsetX_2, 609 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 40 - offsetX_2, 561 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 34 - offsetX_2, 512 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 35 - offsetX_2, 470 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 37 - offsetX_2, 419 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 41 - offsetX_2, 387 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 60 - offsetX_2, 363 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 27 - offsetX_2, 342 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 9 - offsetX_2, 316 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 7 - offsetX_2, 278 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 34 - offsetX_2, 264 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 24 - offsetX_2, 208 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 18 - offsetX_2, 153 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 19 - offsetX_2, 116 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 18 - offsetX_2, 66 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 26 - offsetX_2, 34 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 41 - offsetX_2, 37 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 59 - offsetX_2, 10 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 72 - offsetX_2, 47 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 90 - offsetX_2, 47 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 94 - offsetX_2, 15 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 113 - offsetX_2, 34 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 120 - offsetX_2, 53 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 50 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 136 - offsetX_2, 59 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 117 - offsetX_2, 148 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 194 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 163 - offsetX_2, 167 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 185 - offsetX_2, 197 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 207 - offsetX_2, 171 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 230 - offsetX_2, 199 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 247 - offsetX_2, 220 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 236 - offsetX_2, 277 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 226 - offsetX_2, 303 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 231 - offsetX_2, 341 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 237 - offsetX_2, 381 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 225 - offsetX_2, 424 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 246 - offsetX_2, 439 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 224 - offsetX_2, 496 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 173 - offsetX_2, 520 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 142 - offsetX_2, 528 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 608 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 152 - offsetX_2, 617 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 149 - offsetX_2, 660 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 129 - offsetX_2, 693 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 99 - offsetX_2, 710 - offsetY_2)
-    
-    CGPathCloseSubpath(path_2)
-    
-    topObstacle.physicsBody = SKPhysicsBody(polygonFromPath: path_2)
-    topObstacle.physicsBody?.categoryBitMask = PhysicsCategory.Obstacle
-    topObstacle.physicsBody?.collisionBitMask = 0
-    topObstacle.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-    
-    topObstacle.name = "topObstacle"
-    
-    worldNode.addChild(topObstacle)
     
     let moveX = size.width + bottomObstacle.size.width
     let moveDuration = moveX / kGroundSpeed
@@ -887,6 +907,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       checkHitObstacle()
       checkHitGround()
       updateScore()
+      updateDifficultyLevel()
       break
     case .Falling:
       updatePlayer()
@@ -1000,6 +1021,118 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     
   }
   
+  func updateDifficultyLevel() {
+    
+    switch score {
+    case 0..<10:
+      kGapMultiplier    =      1.50
+      Gravity           =   -1500.0
+      kImpluse          =     600.0
+      kAngularVelocity  =     200.0
+      kEverySpawnDelay  =       2.5
+      break
+    case 11..<20:
+      kGroundSpeed      =     400.0
+      kEverySpawnDelay  =       2.75
+      break
+    case  21..<30:
+      kImpluse          =     700.0
+      kGroundSpeed      =     400.0
+      kEverySpawnDelay  =       3.0
+      kBackgroundSpeed  =      75.0
+      break
+    case 31..<40:
+      kImpluse          =     600.0
+      Gravity           =   -1400.0
+      kGroundSpeed      =     500.0
+      kEverySpawnDelay  =       2.5
+      kBackgroundSpeed  =      50.0
+      kGapMultiplier    =       2.0
+      kAngularVelocity  =      250.0
+      break
+    case 41..<50:
+      kGroundSpeed      =      400.0
+      kGapMultiplier    =        1.75
+      Gravity           =    -1500.0
+      kImpluse          =      700.0
+      break
+    case 51..<60:
+      kGapMultiplier    =        2.0
+      Gravity           =    -1500.0
+      kImpluse          =      600.0
+      kAngularVelocity  =      200.0
+      kEverySpawnDelay  =        2.0
+      kGroundSpeed      =      300.0
+      break
+    case 61..<70:
+      kGapMultiplier    =        2.0
+      Gravity           =    -1550.0
+      kImpluse          =      800.0
+      kAngularVelocity  =      250.0
+      kEverySpawnDelay  =        3.0
+      kGroundSpeed      =      350.0
+      break
+    case 71..<80:
+      kGapMultiplier    =        1.50
+      Gravity           =    -1600.0
+      kImpluse          =      800.0
+      kAngularVelocity  =      200.0
+      kEverySpawnDelay  =        3.5
+      kGroundSpeed      =      275.0
+      break
+    case 81..<90:
+      kGapMultiplier    =        1.50
+      Gravity           =    -1500.0
+      kImpluse          =      600.0
+      kAngularVelocity  =      200.0
+      kEverySpawnDelay  =        2.5
+      kAngularVelocity  =      200.0
+      kGroundSpeed      =      300.0
+      kBackgroundSpeed  =       50.0
+      break
+    case 91..<100:
+      kGapMultiplier    =        1.50
+      Gravity           =    -1300.0
+      kImpluse          =      660.0
+      kAngularVelocity  =      250.0
+      kEverySpawnDelay  =        4.75
+      kAngularVelocity  =      200.0
+      kGroundSpeed      =      260.0
+      kBackgroundSpeed  =       50.0
+      break
+    case 101..<110:
+      kGapMultiplier    =        1.9
+      Gravity           =    -1400.0
+      kImpluse          =      700.0
+      kAngularVelocity  =      200.0
+      kEverySpawnDelay  =        4.0
+      kAngularVelocity  =      200.0
+      kGroundSpeed      =      250.0
+      kBackgroundSpeed  =       50.0
+      break
+    case 111..<120:
+      kGapMultiplier    =        1.75
+      Gravity           =    -1500.0
+      kImpluse          =      600.0
+      kAngularVelocity  =      200.0
+      kEverySpawnDelay  =        2.5
+      kAngularVelocity  =      200.0
+      kGroundSpeed      =      300.0
+      kBackgroundSpeed  =       50.0
+      break
+    default:
+      kGapMultiplier    =      1.50
+      Gravity           =   -1500.0
+      kImpluse          =     600.0
+      kAngularVelocity  =     200.0
+      kEverySpawnDelay  =       2.5
+      kGroundSpeed      =     300.0
+      kBackgroundSpeed  =      50.0
+      break
+    }
+    
+  }
+  
   // MARK: Game States
   
   func switchToFalling() {
@@ -1065,6 +1198,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   //  setupPlayerHat()
     setupMainMenu()
     setupPlayerAnimation()
+   // setupTopObstacleAnimation()
     
   }
   
@@ -1079,6 +1213,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     setupLabel()
     setupTutorial()
     setupPlayerAnimation()
+   // setupTopObstacleAnimation()
     
   }
   
@@ -1109,6 +1244,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     flapPlayer()
     
   }
+  
+  
   
   
   // MARK: Score Card
