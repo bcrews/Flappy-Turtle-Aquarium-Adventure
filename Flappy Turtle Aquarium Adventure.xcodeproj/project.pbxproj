@@ -44,6 +44,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		426E48E61C5087210031E290 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		426E48E71C5087210031E290 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		426E48E81C5087210031E290 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		42C1EC281C3F4E44002E07AB /* Flappy Turtle Aquarium Adventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flappy Turtle Aquarium Adventure.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C1EC2B1C3F4E44002E07AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42C1EC2F1C3F4E44002E07AB /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -284,6 +287,7 @@
 				"es-MX",
 				ru,
 				fr,
+				es,
 			);
 			mainGroup = 42C1EC1F1C3F4E44002E07AB;
 			productRefGroup = 42C1EC291C3F4E44002E07AB /* Products */;
@@ -355,6 +359,7 @@
 				42E515751C4DBAF7007B9494 /* es-MX */,
 				42E515771C4DBB04007B9494 /* ru */,
 				42E515791C4DBB11007B9494 /* fr */,
+				426E48E61C5087210031E290 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -366,6 +371,7 @@
 				42E515761C4DBAF7007B9494 /* es-MX */,
 				42E515781C4DBB04007B9494 /* ru */,
 				42E5157A1C4DBB11007B9494 /* fr */,
+				426E48E71C5087210031E290 /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -378,6 +384,7 @@
 				42E515811C4DF0AB007B9494 /* es-MX */,
 				42E515821C4DF0AD007B9494 /* ru */,
 				42E515831C4DF0AE007B9494 /* fr */,
+				426E48E81C5087210031E290 /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

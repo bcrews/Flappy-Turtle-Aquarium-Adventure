@@ -1009,7 +1009,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
           }
         }
         if self.player.position.x > obstacle.position.x + obstacle.size.width/2 {
-          self.score++
+          self.score+1
           self.scoreLabel.text = "\(self.score)"
           self.scoreLabelBackground.text = "\(self.score)"
           self.runAction(self.coinAction)
