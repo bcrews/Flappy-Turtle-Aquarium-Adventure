@@ -13,21 +13,21 @@ import GameKit
 //MARK: enum's
 
 enum Layer: CGFloat {
-  case Background
-  case Obstacle
-  case Foreground
-  case Player
-  case UI
-  case Flash
+  case background
+  case obstacle
+  case foreground
+  case player
+  case ui
+  case flash
 }
 
 enum GameState {
-  case MainMenu
-  case Tutorial
-  case Play
-  case Falling
-  case ShowingScore
-  case GameOver
+  case mainMenu
+  case tutorial
+  case play
+  case falling
+  case showingScore
+  case gameOver
 }
 
 struct PhysicsCategory {
@@ -40,7 +40,7 @@ struct PhysicsCategory {
 protocol GameSceneDelegate {
   
   func screenShot() -> UIImage
-  func shareString(string: String, url: NSURL, image: UIImage)
+  func shareString(_ string: String, url: URL, image: UIImage)
 }
 
 
@@ -59,8 +59,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   let kBottomObstacleMinFraction: CGFloat = 0.05 // 5%
   let kBottomObstacleMaxFraction: CGFloat = 0.585 // 58.5%
   var kGapMultiplier: CGFloat = 1.50
-  let kFirstSpawnDelay: NSTimeInterval = 1.75
-  var kEverySpawnDelay: NSTimeInterval = 2.5  // 4.75
+  let kFirstSpawnDelay: TimeInterval = 1.75
+  var kEverySpawnDelay: TimeInterval = 2.5  // 4.75
   let kFontName = "AmericanTypewriter-Bold"
   let kScoreFontSize: CGFloat = 110
   let kMargin: CGFloat = 24.0
@@ -86,23 +86,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   var aspectRatio: CGFloat = 0
   var obstacleScaleFactor: CGFloat = 1.3 // 1.2 - 1.5
   var currentLevel: Int = 0
-  var lastUpdateTime: NSTimeInterval = 0
-  var dt: NSTimeInterval = 0
+  var lastUpdateTime: TimeInterval = 0
+  var dt: TimeInterval = 0
   var playerVelocity = CGPoint.zero
   //  let playerHat = SKSpriteNode(imageNamed: "hat-christmas")
   let playerHat = SKSpriteNode(imageNamed: "")
   var hitGround: Bool = false
   var hitObstacle: Bool = false
-  var gameState: GameState = .Tutorial
+  var gameState: GameState = .tutorial
   var scoreLabel: SKLabelNode!
   var scoreLabelBackground: SKLabelNode!
   var score = 0
   var gameSceneDelegate: GameSceneDelegate
   var playerAngularVelocity: CGFloat = 0.0
-  var lastTouchTime: NSTimeInterval = 0
+  var lastTouchTime: TimeInterval = 0
   var lastTouchY: CGFloat = 0.0
   var gameCenterAchievements = [String: GKAchievement]()  // Achievements Dictionary
   var achievementPercent:Double = 0
+
+  var isMusicOn: Bool = true
+  var musicButtonOn = SKSpriteNode(imageNamed: "music_on")
+  var musicButtonOff = SKSpriteNode(imageNamed: "music_off")
   
   
   // MARK: Sounds
@@ -115,6 +119,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   let popAction = SKAction.playSoundFileNamed("pop.wav", waitForCompletion: false)
   let coinAction = SKAction.playSoundFileNamed("coin.wav", waitForCompletion: false)
   
+  func toggleMusic() {
+    if isMusicOn == true {
+      // Turn it off
+      fadePlayer(backgroundMusicPlayer, fromVolume: 0.4, toVolume: 0.0, overTime: 1.0)
+      musicButtonOn.isHidden = true
+      musicButtonOff.isHidden = false
+      isMusicOn = false
+      setMusicSetting(false)
+    } else if isMusicOn == false {
+      // Turn it on
+      playBackgroundMusic("Dancing on Green Grass.mp3")
+      fadePlayer(backgroundMusicPlayer, fromVolume: 0.0, toVolume: 0.4, overTime: 2.0)
+      musicButtonOn.isHidden = false
+      musicButtonOff.isHidden = true
+      isMusicOn = true
+      setMusicSetting(true)
+    }
+    
+  }
+  
+  func getMusicSetting() -> Bool {
+    let musicSetting = UserDefaults.standard.bool(forKey: "MusicSetting")
+    if musicSetting == true {
+      isMusicOn = true
+    } else {
+      isMusicOn = false
+    }
+    
+    // print("Music settings were read to be: ", musicSetting)
+    return musicSetting
+  }
+  
+  func setMusicSetting(_ isOn: Bool) {
+    UserDefaults.standard.set(isOn, forKey: "MusicSetting")
+    UserDefaults.standard.synchronize()
+  }
   
   // Override init to
   init(size: CGSize, delegate:GameSceneDelegate, gameState: GameState) {
@@ -126,6 +166,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     
     super.init(size: size)
     
+    isMusicOn = getMusicSetting()
+    
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -135,7 +177,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   // MARK: didMoveToView
   
-  override func didMoveToView(view: SKView) {
+  override func didMove(to view: SKView) {
     
     // authenticate Player with Game Center
     authenticateLocalPlayer()
@@ -165,7 +207,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     //    // Give player a free flap to start
     //    flapPlayer()
     
-    if gameState == .MainMenu {
+    if gameState == .mainMenu {
       switchToMainMenu()
     } else {
       switchToTutorial()
@@ -183,13 +225,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       
       background.anchorPoint = CGPoint(x: 0.5, y: 1.0)
       background.position = CGPoint(x: CGFloat(i) * size.width, y: size.height)
-      background.zPosition = Layer.Background.rawValue
+      background.zPosition = Layer.background.rawValue
       background.name = "background"
       
       let lowerLeft = CGPoint(x: 0, y: playableStart)
       let lowerRight = CGPoint(x: size.width, y: playableStart)
       
-      self.physicsBody = SKPhysicsBody(edgeFromPoint: lowerLeft, toPoint: lowerRight)
+      self.physicsBody = SKPhysicsBody(edgeFrom: lowerLeft, to: lowerRight)
       self.physicsBody?.categoryBitMask = PhysicsCategory.Ground
       self.physicsBody?.collisionBitMask = 0
       self.physicsBody?.contactTestBitMask = PhysicsCategory.Player
@@ -209,7 +251,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       let foreground = SKSpriteNode(imageNamed: "Ground_Universal")
       foreground.anchorPoint = CGPoint(x: 0, y: 1)
       foreground.position = CGPoint(x: CGFloat(i) * size.width, y: playableStart)
-      foreground.zPosition = Layer.Foreground.rawValue
+      foreground.zPosition = Layer.foreground.rawValue
       foreground.name = "foreground"
       worldNode.addChild(foreground)
     }
@@ -221,53 +263,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     //  print("AspectRatio = \(aspectRatio)")
     
     player.position = CGPoint(x: (size.width * 0.20) * aspectRatio, y: playableHeight * 0.4 + playableStart)
-    player.zPosition = Layer.Player.rawValue
+    player.zPosition = Layer.player.rawValue
     let offsetX = player.size.width * player.anchorPoint.x
     let offsetY = player.size.height * player.anchorPoint.y
     
-    let path = CGPathCreateMutable()
+    let path = CGMutablePath()
     
-    CGPathMoveToPoint(path, nil, 100 - offsetX, 143 - offsetY)
-    CGPathAddLineToPoint(path, nil, 71 - offsetX, 136 - offsetY)
-    CGPathAddLineToPoint(path, nil, 50 - offsetX, 105 - offsetY)
-    CGPathAddLineToPoint(path, nil, 38 - offsetX, 88 - offsetY)
-    CGPathAddLineToPoint(path, nil, 16 - offsetX, 96 - offsetY)
-    CGPathAddLineToPoint(path, nil, 37 - offsetX, 80 - offsetY)
-    CGPathAddLineToPoint(path, nil, 48 - offsetX, 79 - offsetY)
-    CGPathAddLineToPoint(path, nil, 53 - offsetX, 72 - offsetY)
-    CGPathAddLineToPoint(path, nil, 14 - offsetX, 77 - offsetY)
-    CGPathAddLineToPoint(path, nil, 13 - offsetX, 61 - offsetY)
-    CGPathAddLineToPoint(path, nil, 39 - offsetX, 40 - offsetY)
-    CGPathAddLineToPoint(path, nil, 72 - offsetX, 47 - offsetY)
-    CGPathAddLineToPoint(path, nil, 86 - offsetX, 60 - offsetY)
-    CGPathAddLineToPoint(path, nil, 129 - offsetX, 65 - offsetY)
-    CGPathAddLineToPoint(path, nil, 127 - offsetX, 60 - offsetY)
-    CGPathAddLineToPoint(path, nil, 99 - offsetX, 36 - offsetY)
-    CGPathAddLineToPoint(path, nil, 96 - offsetX, 19 - offsetY)
-    CGPathAddLineToPoint(path, nil, 109 - offsetX, 16 - offsetY)
-    CGPathAddLineToPoint(path, nil, 130 - offsetX, 22 - offsetY)
-    CGPathAddLineToPoint(path, nil, 146 - offsetX, 32 - offsetY)
-    CGPathAddLineToPoint(path, nil, 150 - offsetX, 23 - offsetY)
-    CGPathAddLineToPoint(path, nil, 163 - offsetX, 29 - offsetY)
-    CGPathAddLineToPoint(path, nil, 173 - offsetX, 56 - offsetY)
-    CGPathAddLineToPoint(path, nil, 162 - offsetX, 96 - offsetY)
-    CGPathAddLineToPoint(path, nil, 185 - offsetX, 111 - offsetY)
-    CGPathAddLineToPoint(path, nil, 215 - offsetX, 95 - offsetY)
-    CGPathAddLineToPoint(path, nil, 247 - offsetX, 100 - offsetY)
-    CGPathAddLineToPoint(path, nil, 241 - offsetX, 113 - offsetY)
-    CGPathAddLineToPoint(path, nil, 262 - offsetX, 118 - offsetY)
-    CGPathAddLineToPoint(path, nil, 256 - offsetX, 152 - offsetY)
-    CGPathAddLineToPoint(path, nil, 232 - offsetX, 172 - offsetY)
-    CGPathAddLineToPoint(path, nil, 203 - offsetX, 176 - offsetY)
-    CGPathAddLineToPoint(path, nil, 171 - offsetX, 167 - offsetY)
-    CGPathAddLineToPoint(path, nil, 164 - offsetX, 144 - offsetY)
-    CGPathAddLineToPoint(path, nil, 168 - offsetX, 122 - offsetY)
-    CGPathAddLineToPoint(path, nil, 160 - offsetX, 112 - offsetY)
-    CGPathAddLineToPoint(path, nil, 131 - offsetX, 138 - offsetY)
+    path.move(to: CGPoint(x: 100 - offsetX, y: 143 - offsetY))
+    path.addLine(to: CGPoint(x: 71 - offsetX, y: 136 - offsetY))
+    path.addLine(to: CGPoint(x: 50 - offsetX, y: 105 - offsetY))
+    path.addLine(to: CGPoint(x: 38 - offsetX, y: 88 - offsetY))
+    path.addLine(to: CGPoint(x: 16 - offsetX, y: 96 - offsetY))
+    path.addLine(to: CGPoint(x: 37 - offsetX, y: 80 - offsetY))
+    path.addLine(to: CGPoint(x: 48 - offsetX, y: 79 - offsetY))
+    path.addLine(to: CGPoint(x: 53 - offsetX, y: 72 - offsetY))
+    path.addLine(to: CGPoint(x: 14 - offsetX, y: 77 - offsetY))
+    path.addLine(to: CGPoint(x: 13 - offsetX, y: 61 - offsetY))
+    path.addLine(to: CGPoint(x: 39 - offsetX, y: 40 - offsetY))
+    path.addLine(to: CGPoint(x: 72 - offsetX, y: 47 - offsetY))
+    path.addLine(to: CGPoint(x: 86 - offsetX, y: 60 - offsetY))
+    path.addLine(to: CGPoint(x: 129 - offsetX, y: 65 - offsetY))
+    path.addLine(to: CGPoint(x: 127 - offsetX, y: 60 - offsetY))
+    path.addLine(to: CGPoint(x: 99 - offsetX, y: 36 - offsetY))
+    path.addLine(to: CGPoint(x: 96 - offsetX, y: 19 - offsetY))
+    path.addLine(to: CGPoint(x: 109 - offsetX, y: 16 - offsetY))
+    path.addLine(to: CGPoint(x: 130 - offsetX, y: 22 - offsetY))
+    path.addLine(to: CGPoint(x: 146 - offsetX, y: 32 - offsetY))
+    path.addLine(to: CGPoint(x: 150 - offsetX, y: 23 - offsetY))
+    path.addLine(to: CGPoint(x: 163 - offsetX, y: 29 - offsetY))
+    path.addLine(to: CGPoint(x: 173 - offsetX, y: 56 - offsetY))
+    path.addLine(to: CGPoint(x: 162 - offsetX, y: 96 - offsetY))
+    path.addLine(to: CGPoint(x: 185 - offsetX, y: 111 - offsetY))
+    path.addLine(to: CGPoint(x: 215 - offsetX, y: 95 - offsetY))
+    path.addLine(to: CGPoint(x: 247 - offsetX, y: 100 - offsetY))
+    path.addLine(to: CGPoint(x: 241 - offsetX, y: 113 - offsetY))
+    path.addLine(to: CGPoint(x: 262 - offsetX, y: 118 - offsetY))
+    path.addLine(to: CGPoint(x: 256 - offsetX, y: 152 - offsetY))
+    path.addLine(to: CGPoint(x: 232 - offsetX, y: 172 - offsetY))
+    path.addLine(to: CGPoint(x: 203 - offsetX, y: 176 - offsetY))
+    path.addLine(to: CGPoint(x: 171 - offsetX, y: 167 - offsetY))
+    path.addLine(to: CGPoint(x: 164 - offsetX, y: 144 - offsetY))
+    path.addLine(to: CGPoint(x: 168 - offsetX, y: 122 - offsetY))
+    path.addLine(to: CGPoint(x: 160 - offsetX, y: 112 - offsetY))
+    path.addLine(to: CGPoint(x: 131 - offsetX, y: 138 - offsetY))
     
-    CGPathCloseSubpath(path)
+    path.closeSubpath()
     
-    player.physicsBody = SKPhysicsBody(polygonFromPath: path)
+    player.physicsBody = SKPhysicsBody(polygonFrom: path)
     player.physicsBody?.categoryBitMask = PhysicsCategory.Player
     player.physicsBody?.collisionBitMask = 0
     player.physicsBody?.contactTestBitMask = PhysicsCategory.Obstacle | PhysicsCategory.Ground
@@ -298,8 +340,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     scoreLabel.fontColor = SKColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     scoreLabel.position = CGPoint(x: size.width/2, y: size.height - kMargin)
     scoreLabel.text = "0"
-    scoreLabel.verticalAlignmentMode = .Top
-    scoreLabel.zPosition = Layer.UI.rawValue
+    scoreLabel.verticalAlignmentMode = .top
+    scoreLabel.zPosition = Layer.ui.rawValue
     scoreLabel.fontSize = kScoreFontSize
     worldNode.addChild(scoreLabel)
     
@@ -307,7 +349,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     scoreLabelBackground.fontColor = SKColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
     scoreLabelBackground.position = CGPoint(x: size.width/2 + 5, y: size.height - kMargin - 5)
     scoreLabelBackground.text = scoreLabel.text
-    scoreLabelBackground.verticalAlignmentMode = .Top
+    scoreLabelBackground.verticalAlignmentMode = .top
     scoreLabelBackground.zPosition = scoreLabel.zPosition - 1
     scoreLabelBackground.fontSize = kScoreFontSize
     worldNode.addChild(scoreLabelBackground)
@@ -328,14 +370,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     scorecard.xScale *= 1.0 / aspectRatio
     scorecard.yScale *= 1.0 / aspectRatio
     scorecard.name = "Tutorial"
-    scorecard.zPosition = Layer.UI.rawValue
+    scorecard.zPosition = Layer.ui.rawValue
     worldNode.addChild(scorecard)
     
     let lastScore = SKLabelNode(fontNamed: kFontName)
     lastScore.fontSize = kScoreFontSize
     lastScore.fontColor = SKColor(red: 255.0/255.0, green: 248.0/255.0, blue: 121.0/255.0, alpha: 1.0)
     lastScore.position = CGPoint(x: -scorecard.size.width * 0.17 * aspectRatio, y: -scorecard.size.height * 0.25 * aspectRatio)
-    lastScore.zPosition = Layer.UI.rawValue
+    lastScore.zPosition = Layer.ui.rawValue
     lastScore.text = "\(score)"
     scorecard.addChild(lastScore)
     
@@ -343,7 +385,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     lastScoreOutline.fontSize = kScoreFontSize
     lastScoreOutline.fontColor = SKColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
     lastScoreOutline.position = CGPoint(x: -scorecard.size.width * 0.17 * aspectRatio + 5, y: -scorecard.size.height * 0.25 * aspectRatio - 6)
-    lastScoreOutline.zPosition = Layer.UI.rawValue - 1
+    lastScoreOutline.zPosition = Layer.ui.rawValue - 1
     lastScoreOutline.text = "\(score)"
     scorecard.addChild(lastScoreOutline)
     
@@ -352,7 +394,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     bestScoreLabel.fontSize = kScoreFontSize
     bestScoreLabel.fontColor = SKColor(red: 255.0/255.0, green: 248.0/255.0, blue: 121.0/255.0, alpha: 1.0)
     bestScoreLabel.position = CGPoint(x: scorecard.size.width * 0.20 * aspectRatio, y: -scorecard.size.height * 0.25 * aspectRatio)
-    bestScoreLabel.zPosition = Layer.UI.rawValue
+    bestScoreLabel.zPosition = Layer.ui.rawValue
     bestScoreLabel.text = "\(self.bestScore())"
     scorecard.addChild(bestScoreLabel)
     
@@ -360,7 +402,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     bestScoreLabelOutline.fontSize = kScoreFontSize
     bestScoreLabelOutline.fontColor = SKColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
     bestScoreLabelOutline.position = CGPoint(x: scorecard.size.width * 0.20 * aspectRatio, y: -scorecard.size.height * 0.25 * aspectRatio)
-    bestScoreLabelOutline.zPosition = Layer.UI.rawValue - 1
+    bestScoreLabelOutline.zPosition = Layer.ui.rawValue - 1
     bestScoreLabelOutline.text = "\(self.bestScore())"
     scorecard.addChild(bestScoreLabelOutline)
     
@@ -369,7 +411,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     gameOver.position = CGPoint(x: size.width/2, y: size.height/2 + scorecard.size.height/2 + 275 + gameOver.size.height/2)
     gameOver.xScale *= aspectRatio
     gameOver.yScale *= aspectRatio
-    gameOver.zPosition = Layer.UI.rawValue
+    gameOver.zPosition = Layer.ui.rawValue
     worldNode.addChild(gameOver)
     
     let okButton = SKSpriteNode(imageNamed: "Button")
@@ -377,13 +419,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     okButton.yScale *= aspectRatio
     okButton.position = CGPoint(x: size.width/2 - scorecard.size.width/2 + okButton.size.width/2,
       y: size.height/2 - scorecard.size.height/2 - kMargin - okButton.size.height/2)
-    okButton.zPosition = Layer.UI.rawValue
+    okButton.zPosition = Layer.ui.rawValue
     okButton.name = "okButton"
     worldNode.addChild(okButton)
     
     let ok = SKSpriteNode(imageNamed: NSLocalizedString("OKImageName", comment: "OK Image Name"))
     ok.position = CGPoint.zero
-    ok.zPosition = Layer.UI.rawValue
+    ok.zPosition = Layer.ui.rawValue
     ok.name = "okLabel"
     okButton.addChild(ok)
     
@@ -392,13 +434,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     shareButton.yScale *= aspectRatio
     shareButton.position = CGPoint(x: size.width/2 + scorecard.size.width/2 - shareButton.size.width/2,
       y: size.height/2 - scorecard.size.height/2 - kMargin - shareButton.size.height/2)
-    shareButton.zPosition = Layer.UI.rawValue
+    shareButton.zPosition = Layer.ui.rawValue
     shareButton.name = "shareButton"
     worldNode.addChild(shareButton)
     
     let share = SKSpriteNode(imageNamed: NSLocalizedString("ShareImageName", comment: "Share Image Name"))
     share.position = CGPoint.zero
-    share.zPosition = Layer.UI.rawValue
+    share.zPosition = Layer.ui.rawValue
     share.name = "shareLabel"
     shareButton.addChild(share)
     
@@ -410,13 +452,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     achievementsButton.yScale *= aspectRatio
     achievementsButton.position = CGPoint(x: size.width/2 - scorecard.size.width/2 + okButton.size.width/2,
       y: size.height/2 - scorecard.size.height/2 - (kMargin * 11) - okButton.size.height/2)
-    achievementsButton.zPosition = Layer.UI.rawValue
+    achievementsButton.zPosition = Layer.ui.rawValue
     achievementsButton.name = "achievementsButton"
     worldNode.addChild(achievementsButton)
     
     let achievements = SKSpriteNode(imageNamed: NSLocalizedString("AchievementsImageName",comment: "Achievements Image Name"))
     achievements.position = CGPoint.zero
-    achievements.zPosition = Layer.UI.rawValue
+    achievements.zPosition = Layer.ui.rawValue
     achievements.name = "achievements"
     achievementsButton.addChild(achievements)
     
@@ -425,13 +467,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     leaderboardButton.yScale *= aspectRatio
     leaderboardButton.position = CGPoint(x: size.width/2 + scorecard.size.width/2 - shareButton.size.width/2,
       y: size.height/2 - scorecard.size.height/2 - (kMargin * 11) - shareButton.size.height/2)
-    leaderboardButton.zPosition = Layer.UI.rawValue
+    leaderboardButton.zPosition = Layer.ui.rawValue
     leaderboardButton.name = "leaderboardButton"
     worldNode.addChild(leaderboardButton)
     
     let leaderboard = SKSpriteNode(imageNamed: NSLocalizedString("LeaderboardImageName", comment: "Leaderboard Image Name"))
     leaderboard.position = CGPoint.zero
-    leaderboard.zPosition = Layer.UI.rawValue
+    leaderboard.zPosition = Layer.ui.rawValue
     leaderboard.name = "leaderboard"
     leaderboardButton.addChild(leaderboard)
 
@@ -442,22 +484,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     gameOver.setScale(0)
     gameOver.alpha = 0
     let group = SKAction.group([
-      SKAction.fadeInWithDuration(kAnimDelay),
-      SKAction.scaleTo(aspectRatio, duration: kAnimDelay)
+      SKAction.fadeIn(withDuration: kAnimDelay),
+      SKAction.scale(to: aspectRatio, duration: kAnimDelay)
       ])
-    group.timingMode = .EaseInEaseOut
+    group.timingMode = .easeInEaseOut
     
-    gameOver.runAction(SKAction.sequence([
-      SKAction.waitForDuration(kAnimDelay),
+    gameOver.run(SKAction.sequence([
+      SKAction.wait(forDuration: kAnimDelay),
       group
       ]))
     
     // Slide up ScoreCard
     scorecard.position = CGPoint(x:size.width * 0.5, y: -scorecard.size.height/2)
-    let moveTo = SKAction.moveTo(CGPoint(x: size.width * 0.5, y: size.height * 0.60), duration: kAnimDelay)
-    moveTo.timingMode = .EaseInEaseOut
-    scorecard.runAction(SKAction.sequence([
-      SKAction.waitForDuration(kAnimDelay * 2),
+    let moveTo = SKAction.move(to: CGPoint(x: size.width * 0.5, y: size.height * 0.60), duration: kAnimDelay)
+    moveTo.timingMode = .easeInEaseOut
+    scorecard.run(SKAction.sequence([
+      SKAction.wait(forDuration: kAnimDelay * 2),
       moveTo
       ]))
     
@@ -468,25 +510,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     leaderboardButton.alpha = 0
     
     let fadeIn = SKAction.sequence([
-      SKAction.waitForDuration(kAnimDelay * 3),
-      SKAction.fadeInWithDuration(kAnimDelay * 1.5)
+      SKAction.wait(forDuration: kAnimDelay * 3),
+      SKAction.fadeIn(withDuration: kAnimDelay * 1.5)
       ])
-    okButton.runAction(fadeIn)
-    shareButton.runAction(fadeIn)
-    achievementsButton.runAction(fadeIn)
-    leaderboardButton.runAction(fadeIn)
+    okButton.run(fadeIn)
+    shareButton.run(fadeIn)
+    achievementsButton.run(fadeIn)
+    leaderboardButton.run(fadeIn)
     
     // Play animation sounds
     let pops = SKAction.sequence([
-      SKAction.waitForDuration(kAnimDelay),
+      SKAction.wait(forDuration: kAnimDelay),
       popAction,
-      SKAction.waitForDuration(kAnimDelay),
+      SKAction.wait(forDuration: kAnimDelay),
       popAction,
-      SKAction.waitForDuration(kAnimDelay),
+      SKAction.wait(forDuration: kAnimDelay),
       popAction,
-      SKAction.runBlock(switchToGameOver)
+      SKAction.run(switchToGameOver)
       ])
-    runAction(pops)
+    run(pops)
     
   }
   
@@ -496,33 +538,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     ready.setScale(2.0)
     ready.position = CGPoint(x: size.width * 0.5, y: playableHeight * 0.75 + playableStart)
     ready.name = "Tutorial"
-    ready.zPosition = Layer.UI.rawValue
+    ready.zPosition = Layer.ui.rawValue
     worldNode.addChild(ready)
     
     let tutorial = SKSpriteNode(imageNamed: NSLocalizedString("TutorialImageName", comment: "Tutorial Image Name"))
     tutorial.setScale(2.5)
     tutorial.position = CGPoint(x: size.width * 0.5, y: playableHeight * 0.4 + playableStart)
     tutorial.name = "Tutorial"
-    tutorial.zPosition = Layer.UI.rawValue
+    tutorial.zPosition = Layer.ui.rawValue
     worldNode.addChild(tutorial)
     
     // Animate Ready & Tutorial
     ready.position = CGPoint(x: size.width * 0.5, y: size.height + ready.size.height/2)
-    let moveTo = SKAction.moveTo(CGPoint(x: size.width * 0.5, y: playableHeight * 0.75 + playableStart), duration: 1.0)
-    moveTo.timingMode = .EaseInEaseOut
-    ready.runAction(SKAction.sequence([
-      SKAction.waitForDuration(kAnimDelay),
+    let moveTo = SKAction.move(to: CGPoint(x: size.width * 0.5, y: playableHeight * 0.75 + playableStart), duration: 1.0)
+    moveTo.timingMode = .easeInEaseOut
+    ready.run(SKAction.sequence([
+      SKAction.wait(forDuration: kAnimDelay),
       moveTo
       ]))
     
-    let tutorialMoveUp = SKAction.moveByX(0, y: 50, duration: kAnimDelay)
-    let tutorialMoveDown = SKAction.moveByX(0, y: -50, duration: kAnimDelay)
+    let tutorialMoveUp = SKAction.moveBy(x: 0, y: 50, duration: kAnimDelay)
+    let tutorialMoveDown = SKAction.moveBy(x: 0, y: -50, duration: kAnimDelay)
     let tutorialMoveUpDown = SKAction.sequence([
       tutorialMoveUp,
       tutorialMoveDown,
-      SKAction.waitForDuration(0.1)])
-    let bouceTutorial = SKAction.repeatActionForever(tutorialMoveUpDown)
-    tutorial.runAction(bouceTutorial)
+      SKAction.wait(forDuration: 0.1)])
+    let bouceTutorial = SKAction.repeatForever(tutorialMoveUpDown)
+    tutorial.run(bouceTutorial)
     
   }
   
@@ -531,7 +573,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     let logo = SKSpriteNode(imageNamed: NSLocalizedString("LogoImageName", comment: "Logo Image Name"))
     logo.setScale(2.0)
     logo.position = CGPoint(x: size.width/2, y: size.height * 0.8)
-    logo.zPosition = Layer.UI.rawValue
+    logo.zPosition = Layer.ui.rawValue
     logo.name = "logo"
     worldNode.addChild(logo)
     
@@ -539,7 +581,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     let playButton = SKSpriteNode(imageNamed: "Button")
     playButton.setScale(1.33)
     playButton.position = CGPoint(x: size.width * 0.20 + playButton.size.width/2, y: size.height * 0.30 - kMargin)
-    playButton.zPosition = Layer.UI.rawValue
+    playButton.zPosition = Layer.ui.rawValue
     playButton.name = "playButton"
     worldNode.addChild(playButton)
     
@@ -552,7 +594,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     let rateButton = SKSpriteNode(imageNamed: "RateButton")
     rateButton.setScale(1.33)
     rateButton.position = CGPoint(x: size.width * 0.80 - rateButton.size.width/2, y: size.height * 0.30 - kMargin)
-    rateButton.zPosition = Layer.UI.rawValue
+    rateButton.zPosition = Layer.ui.rawValue
     rateButton.name = "rateButton"
     worldNode.addChild(rateButton)
     
@@ -566,12 +608,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     player.position = CGPoint(x: size.width/2 - 10, y: size.height/2 + (kMargin * 7.0))
     
     // Animate hero/player
-    let moveUp = SKAction.moveByX(0, y: 50, duration: 0.5)
-    moveUp.timingMode = .EaseInEaseOut
-    let moveDown = SKAction.moveByX(0, y: -50, duration: 0.5)
-    moveDown.timingMode = .EaseInEaseOut
+    let moveUp = SKAction.moveBy(x: 0, y: 50, duration: 0.5)
+    moveUp.timingMode = .easeInEaseOut
+    let moveDown = SKAction.moveBy(x: 0, y: -50, duration: 0.5)
+    moveDown.timingMode = .easeInEaseOut
     
-    player.runAction(SKAction.repeatActionForever(SKAction.sequence([
+    player.run(SKAction.repeatForever(SKAction.sequence([
       moveUp, moveDown
       ])), withKey: "playerBounce")
     
@@ -584,12 +626,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     for i in 0..<kNumPlayerFrames {
       textures.append(SKTexture(imageNamed: "Turtle_Universal_\(i)"))
     }
-    for i in kNumPlayerFrames.stride(through: 0, by: -1) {
+    for i in stride(from: kNumPlayerFrames, through: 0, by: -1) {
       textures.append(SKTexture(imageNamed: "Turtle_Universal_\(i)"))
     }
     
-    let playerAnimation = SKAction.animateWithTextures(textures, timePerFrame: 0.07)
-    player.runAction(SKAction.repeatActionForever(playerAnimation))
+    let playerAnimation = SKAction.animate(with: textures, timePerFrame: 0.07)
+    player.run(SKAction.repeatForever(playerAnimation))
   }
   
   func setupTopObstacleAnimation() {
@@ -598,20 +640,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     for i in 0..<kNumTopObstacleFrames {
       textures.append(SKTexture(imageNamed: "JellyFish_Universal_\(i)"))
     }
-    for i in (kNumTopObstacleFrames - 1).stride(through: 0, by: -1) {
+    for i in stride(from: (kNumTopObstacleFrames - 1), through: 0, by: -1) {
       textures.append(SKTexture(imageNamed: "JellyFish_Universal_\(i)"))
     }
     
-    let topObstacleAnimation = SKAction.animateWithTextures(textures, timePerFrame: 0.05)
-    topObstacle.runAction(SKAction.repeatActionForever(topObstacleAnimation))
+    let topObstacleAnimation = SKAction.animate(with: textures, timePerFrame: 0.05)
+    topObstacle.run(SKAction.repeatForever(topObstacleAnimation))
   }
   
   
+  func setupHud() {
+    
+    musicButtonOn.position = CGPoint(x: size.width * 0.8, y: playableStart - musicButtonOn.size.height - kMargin * 4.0)
+    musicButtonOn.setScale(2.0)
+    musicButtonOn.alpha = 0.90
+    musicButtonOn.zPosition = Layer.ui.rawValue
+    musicButtonOn.name = "musicButtonOn"
+    worldNode.addChild(musicButtonOn)
+    
+    musicButtonOff.position = CGPoint(x: size.width * 0.8, y: playableStart - musicButtonOff.size.height - kMargin * 4.0)
+    musicButtonOff.setScale(2.0)
+    musicButtonOff.alpha = 0.90
+    musicButtonOff.zPosition = Layer.ui.rawValue
+    musicButtonOff.name = "musicButtonOff"
+    musicButtonOff.isHidden = true
+    worldNode.addChild(musicButtonOff)
+    
+  }
+  
   // MARK: Gameplay
   
-  func createObstacle(imageName: String) -> SKSpriteNode {
+  func createObstacle(_ imageName: String) -> SKSpriteNode {
     let sprite = SKSpriteNode(imageNamed: imageName)
-    sprite.zPosition = Layer.Obstacle.rawValue
+    sprite.zPosition = Layer.obstacle.rawValue
     
     // Setup empty Dictionary for sprites userData
     sprite.userData = NSMutableDictionary()
@@ -624,67 +685,67 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     let texture = SKTexture(imageNamed: "JellyFish_Universal_0")
     topObstacle = SKSpriteNode(texture: texture)
     topObstacle.userData = NSMutableDictionary()
-    topObstacle.zPosition = Layer.Obstacle.rawValue
+    topObstacle.zPosition = Layer.obstacle.rawValue
     
     let offsetX_2 = topObstacle.size.width * topObstacle.anchorPoint.x
     let offsetY_2 = topObstacle.size.height * topObstacle.anchorPoint.y
     
-    let path_2 = CGPathCreateMutable()
+    let path_2 = CGMutablePath()
     
-    CGPathMoveToPoint(path_2, nil, 69 - offsetX_2, 713 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 30 - offsetX_2, 691 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 8 - offsetX_2, 649 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 16 - offsetX_2, 619 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 38 - offsetX_2, 609 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 40 - offsetX_2, 561 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 34 - offsetX_2, 512 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 35 - offsetX_2, 470 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 37 - offsetX_2, 419 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 41 - offsetX_2, 387 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 60 - offsetX_2, 363 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 27 - offsetX_2, 342 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 9 - offsetX_2, 316 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 7 - offsetX_2, 278 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 34 - offsetX_2, 264 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 24 - offsetX_2, 208 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 18 - offsetX_2, 153 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 19 - offsetX_2, 116 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 18 - offsetX_2, 66 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 26 - offsetX_2, 34 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 41 - offsetX_2, 37 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 59 - offsetX_2, 10 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 72 - offsetX_2, 47 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 90 - offsetX_2, 47 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 94 - offsetX_2, 15 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 113 - offsetX_2, 34 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 120 - offsetX_2, 53 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 50 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 136 - offsetX_2, 59 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 117 - offsetX_2, 148 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 194 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 163 - offsetX_2, 167 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 185 - offsetX_2, 197 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 207 - offsetX_2, 171 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 230 - offsetX_2, 199 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 247 - offsetX_2, 220 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 236 - offsetX_2, 277 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 226 - offsetX_2, 303 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 231 - offsetX_2, 341 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 237 - offsetX_2, 381 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 225 - offsetX_2, 424 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 246 - offsetX_2, 439 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 224 - offsetX_2, 496 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 173 - offsetX_2, 520 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 142 - offsetX_2, 528 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 131 - offsetX_2, 608 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 152 - offsetX_2, 617 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 149 - offsetX_2, 660 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 129 - offsetX_2, 693 - offsetY_2)
-    CGPathAddLineToPoint(path_2, nil, 99 - offsetX_2, 710 - offsetY_2)
+    path_2.move(to: CGPoint(x: 69 - offsetX_2, y: 713 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 30 - offsetX_2, y: 691 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 8 - offsetX_2, y: 649 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 16 - offsetX_2, y: 619 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 38 - offsetX_2, y: 609 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 40 - offsetX_2, y: 561 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 34 - offsetX_2, y: 512 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 35 - offsetX_2, y: 470 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 37 - offsetX_2, y: 419 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 41 - offsetX_2, y: 387 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 60 - offsetX_2, y: 363 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 27 - offsetX_2, y: 342 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 9 - offsetX_2, y: 316 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 7 - offsetX_2, y: 278 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 34 - offsetX_2, y: 264 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 24 - offsetX_2, y: 208 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 18 - offsetX_2, y: 153 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 19 - offsetX_2, y: 116 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 18 - offsetX_2, y: 66 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 26 - offsetX_2, y: 34 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 41 - offsetX_2, y: 37 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 59 - offsetX_2, y: 10 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 72 - offsetX_2, y: 47 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 90 - offsetX_2, y: 47 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 94 - offsetX_2, y: 15 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 113 - offsetX_2, y: 34 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 120 - offsetX_2, y: 53 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 131 - offsetX_2, y: 50 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 136 - offsetX_2, y: 59 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 117 - offsetX_2, y: 148 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 131 - offsetX_2, y: 194 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 163 - offsetX_2, y: 167 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 185 - offsetX_2, y: 197 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 207 - offsetX_2, y: 171 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 230 - offsetX_2, y: 199 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 247 - offsetX_2, y: 220 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 236 - offsetX_2, y: 277 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 226 - offsetX_2, y: 303 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 231 - offsetX_2, y: 341 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 237 - offsetX_2, y: 381 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 225 - offsetX_2, y: 424 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 246 - offsetX_2, y: 439 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 224 - offsetX_2, y: 496 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 173 - offsetX_2, y: 520 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 142 - offsetX_2, y: 528 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 131 - offsetX_2, y: 608 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 152 - offsetX_2, y: 617 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 149 - offsetX_2, y: 660 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 129 - offsetX_2, y: 693 - offsetY_2))
+    path_2.addLine(to: CGPoint(x: 99 - offsetX_2, y: 710 - offsetY_2))
     
-    CGPathCloseSubpath(path_2)
+    path_2.closeSubpath()
     
-    topObstacle.physicsBody = SKPhysicsBody(polygonFromPath: path_2)
+    topObstacle.physicsBody = SKPhysicsBody(polygonFrom: path_2)
     topObstacle.physicsBody?.categoryBitMask = PhysicsCategory.Obstacle
     topObstacle.physicsBody?.collisionBitMask = 0
     topObstacle.physicsBody?.contactTestBitMask = PhysicsCategory.Player
@@ -708,56 +769,56 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     let bottomObstacleMax = (playableStart - bottomObstacle.size.height/2 + playableHeight * kBottomObstacleMaxFraction)
     bottomObstacle.xScale *= size.width / size.height * obstacleScaleFactor
     bottomObstacle.yScale *= size.width / size.height * obstacleScaleFactor
-    bottomObstacle.position = CGPointMake(startX, CGFloat.random(min: bottomObstacleMin, max: bottomObstacleMax))
+    bottomObstacle.position = CGPoint(x: startX, y: CGFloat.random(min: bottomObstacleMin, max: bottomObstacleMax))
     
     
     let offsetX = bottomObstacle.size.width * bottomObstacle.anchorPoint.x
     let offsetY = bottomObstacle.size.height * bottomObstacle.anchorPoint.y
     
-    let path = CGPathCreateMutable()
+    let path = CGMutablePath()
     
-    CGPathMoveToPoint(path, nil, 112 - offsetX, 978 - offsetY)
-    CGPathAddLineToPoint(path, nil, 86 - offsetX, 948 - offsetY)
-    CGPathAddLineToPoint(path, nil, 55 - offsetX, 924 - offsetY)
-    CGPathAddLineToPoint(path, nil, 53 - offsetX, 852 - offsetY)
-    CGPathAddLineToPoint(path, nil, 45 - offsetX, 728 - offsetY)
-    CGPathAddLineToPoint(path, nil, 59 - offsetX, 548 - offsetY)
-    CGPathAddLineToPoint(path, nil, 1 - offsetX, 498 - offsetY)
-    CGPathAddLineToPoint(path, nil, 4 - offsetX, 467 - offsetY)
-    CGPathAddLineToPoint(path, nil, 37 - offsetX, 420 - offsetY)
-    CGPathAddLineToPoint(path, nil, 28 - offsetX, 369 - offsetY)
-    CGPathAddLineToPoint(path, nil, 43 - offsetX, 241 - offsetY)
-    CGPathAddLineToPoint(path, nil, 45 - offsetX, 182 - offsetY)
-    CGPathAddLineToPoint(path, nil, 49 - offsetX, 131 - offsetY)
-    CGPathAddLineToPoint(path, nil, 26 - offsetX, 115 - offsetY)
-    CGPathAddLineToPoint(path, nil, 31 - offsetX, 73 - offsetY)
-    CGPathAddLineToPoint(path, nil, 5 - offsetX, 36 - offsetY)
-    CGPathAddLineToPoint(path, nil, 42 - offsetX, 39 - offsetY)
-    CGPathAddLineToPoint(path, nil, 58 - offsetX, 15 - offsetY)
-    CGPathAddLineToPoint(path, nil, 93 - offsetX, 4 - offsetY)
-    CGPathAddLineToPoint(path, nil, 166 - offsetX, 13 - offsetY)
-    CGPathAddLineToPoint(path, nil, 148 - offsetX, 75 - offsetY)
-    CGPathAddLineToPoint(path, nil, 131 - offsetX, 88 - offsetY)
-    CGPathAddLineToPoint(path, nil, 162 - offsetX, 136 - offsetY)
-    CGPathAddLineToPoint(path, nil, 162 - offsetX, 330 - offsetY)
-    CGPathAddLineToPoint(path, nil, 161 - offsetX, 392 - offsetY)
-    CGPathAddLineToPoint(path, nil, 131 - offsetX, 402 - offsetY)
-    CGPathAddLineToPoint(path, nil, 149 - offsetX, 466 - offsetY)
-    CGPathAddLineToPoint(path, nil, 148 - offsetX, 514 - offsetY)
-    CGPathAddLineToPoint(path, nil, 162 - offsetX, 651 - offsetY)
-    CGPathAddLineToPoint(path, nil, 173 - offsetX, 673 - offsetY)
-    CGPathAddLineToPoint(path, nil, 202 - offsetX, 665 - offsetY)
-    CGPathAddLineToPoint(path, nil, 207 - offsetX, 695 - offsetY)
-    CGPathAddLineToPoint(path, nil, 163 - offsetX, 705 - offsetY)
-    CGPathAddLineToPoint(path, nil, 165 - offsetX, 959 - offsetY)
-    CGPathAddLineToPoint(path, nil, 153 - offsetX, 995 - offsetY)
-    CGPathAddLineToPoint(path, nil, 141 - offsetX, 952 - offsetY)
-    CGPathAddLineToPoint(path, nil, 124 - offsetX, 951 - offsetY)
-    CGPathAddLineToPoint(path, nil, 126 - offsetX, 965 - offsetY)
+    path.move(to: CGPoint(x: 112 - offsetX, y: 978 - offsetY))
+    path.addLine(to: CGPoint(x: 86 - offsetX, y: 948 - offsetY))
+    path.addLine(to: CGPoint(x: 55 - offsetX, y: 924 - offsetY))
+    path.addLine(to: CGPoint(x: 53 - offsetX, y: 852 - offsetY))
+    path.addLine(to: CGPoint(x: 45 - offsetX, y: 728 - offsetY))
+    path.addLine(to: CGPoint(x: 59 - offsetX, y: 548 - offsetY))
+    path.addLine(to: CGPoint(x: 1 - offsetX, y: 498 - offsetY))
+    path.addLine(to: CGPoint(x: 4 - offsetX, y: 467 - offsetY))
+    path.addLine(to: CGPoint(x: 37 - offsetX, y: 420 - offsetY))
+    path.addLine(to: CGPoint(x: 28 - offsetX, y: 369 - offsetY))
+    path.addLine(to: CGPoint(x: 43 - offsetX, y: 241 - offsetY))
+    path.addLine(to: CGPoint(x: 45 - offsetX, y: 182 - offsetY))
+    path.addLine(to: CGPoint(x: 49 - offsetX, y: 131 - offsetY))
+    path.addLine(to: CGPoint(x: 26 - offsetX, y: 115 - offsetY))
+    path.addLine(to: CGPoint(x: 31 - offsetX, y: 73 - offsetY))
+    path.addLine(to: CGPoint(x: 5 - offsetX, y: 36 - offsetY))
+    path.addLine(to: CGPoint(x: 42 - offsetX, y: 39 - offsetY))
+    path.addLine(to: CGPoint(x: 58 - offsetX, y: 15 - offsetY))
+    path.addLine(to: CGPoint(x: 93 - offsetX, y: 4 - offsetY))
+    path.addLine(to: CGPoint(x: 166 - offsetX, y: 13 - offsetY))
+    path.addLine(to: CGPoint(x: 148 - offsetX, y: 75 - offsetY))
+    path.addLine(to: CGPoint(x: 131 - offsetX, y: 88 - offsetY))
+    path.addLine(to: CGPoint(x: 162 - offsetX, y: 136 - offsetY))
+    path.addLine(to: CGPoint(x: 162 - offsetX, y: 330 - offsetY))
+    path.addLine(to: CGPoint(x: 161 - offsetX, y: 392 - offsetY))
+    path.addLine(to: CGPoint(x: 131 - offsetX, y: 402 - offsetY))
+    path.addLine(to: CGPoint(x: 149 - offsetX, y: 466 - offsetY))
+    path.addLine(to: CGPoint(x: 148 - offsetX, y: 514 - offsetY))
+    path.addLine(to: CGPoint(x: 162 - offsetX, y: 651 - offsetY))
+    path.addLine(to: CGPoint(x: 173 - offsetX, y: 673 - offsetY))
+    path.addLine(to: CGPoint(x: 202 - offsetX, y: 665 - offsetY))
+    path.addLine(to: CGPoint(x: 207 - offsetX, y: 695 - offsetY))
+    path.addLine(to: CGPoint(x: 163 - offsetX, y: 705 - offsetY))
+    path.addLine(to: CGPoint(x: 165 - offsetX, y: 959 - offsetY))
+    path.addLine(to: CGPoint(x: 153 - offsetX, y: 995 - offsetY))
+    path.addLine(to: CGPoint(x: 141 - offsetX, y: 952 - offsetY))
+    path.addLine(to: CGPoint(x: 124 - offsetX, y: 951 - offsetY))
+    path.addLine(to: CGPoint(x: 126 - offsetX, y: 965 - offsetY))
     
-    CGPathCloseSubpath(path)
+    path.closeSubpath()
     
-    bottomObstacle.physicsBody = SKPhysicsBody(polygonFromPath: path)
+    bottomObstacle.physicsBody = SKPhysicsBody(polygonFrom: path)
     bottomObstacle.physicsBody?.categoryBitMask = PhysicsCategory.Obstacle
     bottomObstacle.physicsBody?.collisionBitMask = 0
     bottomObstacle.physicsBody?.contactTestBitMask = PhysicsCategory.Player
@@ -771,8 +832,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     
     
     //let topObstacle = createObstacle("JellyFish_Universal_0")
-     topObstacle.position = CGPoint(x: startX, y: bottomObstacle.position.y + bottomObstacle.size.height/2 + topObstacle.size.height/2 + player.size.height * kGapMultiplier)
-    topObstacle.zPosition = Layer.Obstacle.rawValue
+    topObstacle.position = CGPoint(x: startX, y: bottomObstacle.position.y + bottomObstacle.size.height/2 + topObstacle.size.height/2 + player.size.height * kGapMultiplier)
+    topObstacle.zPosition = Layer.obstacle.rawValue
     topObstacle.xScale *= size.width / size.height * obstacleScaleFactor
     topObstacle.yScale *= size.width / size.height * obstacleScaleFactor
     
@@ -780,39 +841,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     let moveX = size.width + bottomObstacle.size.width
     let moveDuration = moveX / kGroundSpeed
     let sequence = SKAction.sequence([
-      SKAction.moveByX(-moveX, y: 0, duration: NSTimeInterval(moveDuration)),
+      SKAction.moveBy(x: -moveX, y: 0, duration: TimeInterval(moveDuration)),
       SKAction.removeFromParent()
       ])
-    topObstacle.runAction(sequence)
-    bottomObstacle.runAction(sequence)
+    topObstacle.run(sequence)
+    bottomObstacle.run(sequence)
     
   }
   
   func startSpawning() {
     
-    let firstDelay = SKAction.waitForDuration(kFirstSpawnDelay)
-    let spawn = SKAction.runBlock(spawnObstacle)
-    let everyDelay = SKAction.waitForDuration(kEverySpawnDelay)
+    let firstDelay = SKAction.wait(forDuration: kFirstSpawnDelay)
+    let spawn = SKAction.run(spawnObstacle)
+    let everyDelay = SKAction.wait(forDuration: kEverySpawnDelay)
     let spawnSequence = SKAction.sequence([
       spawn, everyDelay
       ])
-    let foreverSpawn = SKAction.repeatActionForever(spawnSequence)
+    let foreverSpawn = SKAction.repeatForever(spawnSequence)
     let overallSequence = SKAction.sequence([firstDelay, foreverSpawn])
-    runAction(overallSequence, withKey: "spawn")
+    run(overallSequence, withKey: "spawn")
     
   }
   
   func stopSpawning() {
     
     // Stop the spawn creation of obstacles
-    removeActionForKey("spawn")
+    removeAction(forKey: "spawn")
     
     // Stop the moving actions of ones already created
-    worldNode.enumerateChildNodesWithName("topObstacle", usingBlock: { node, stop in
+    worldNode.enumerateChildNodes(withName: "topObstacle", using: { node, stop in
       node.removeAllActions()
     })
     
-    worldNode.enumerateChildNodesWithName("bottomObstacle", usingBlock: { node, stop in
+    worldNode.enumerateChildNodes(withName: "bottomObstacle", using: { node, stop in
       node.removeAllActions()
     })
     
@@ -821,7 +882,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   func flapPlayer() {
     
     // Play sound
-    runAction(flapAction)
+    run(flapAction)
     
     playerVelocity = CGPoint(x: 0, y: kImpluse)
     playerAngularVelocity = kAngularVelocity.degreesToRadians()
@@ -829,45 +890,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     lastTouchY = player.position.y
     
     // Move Hat
-    let moveUp = SKAction.moveByX(0, y: 20, duration: 0.15)
-    moveUp.timingMode = .EaseInEaseOut
-    let moveDown = moveUp.reversedAction()
-    playerHat.runAction(SKAction.sequence([ moveUp, moveDown]))
+    let moveUp = SKAction.moveBy(x: 0, y: 20, duration: 0.15)
+    moveUp.timingMode = .easeInEaseOut
+    let moveDown = moveUp.reversed()
+    playerHat.run(SKAction.sequence([ moveUp, moveDown]))
     
   }
   
-  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     
     //    if let touch = touches.first {
     //      print("\(touch)")
     //    }
     
     for touch: AnyObject! in touches {
-      let touchLocation = touch.locationInNode(self)
-      let touchedNode = self.nodeAtPoint(touchLocation)
+      let touchLocation = touch.location(in: self)
+      let touchedNode = self.atPoint(touchLocation)
       
       switch gameState {
-      case .MainMenu:
+      case .mainMenu:
         if touchedNode.name == "playButton" || touchedNode.name == "playLabel" {
-          switchToNewGame(.Tutorial)
+          switchToNewGame(.tutorial)
         }
         if touchedNode.name == "rateButton" || touchedNode.name == "rateLabel" {
           rateApp()
         }
         break
-      case .Tutorial:
-        switchToPlay()
+      case .tutorial:
+        if touchedNode.name == "musicButtonOn" || touchedNode.name == "musicButtonOff" {
+          toggleMusic()
+        } else {
+          switchToPlay()
+        }
         break
-      case .Play:
-        flapPlayer()
+      case .play:
+        if touchedNode.name == "musicButtonOn" || touchedNode.name == "musicButtonOff" {
+          toggleMusic()
+        } else {
+          flapPlayer()
+        }
         break
-      case .Falling:
+      case .falling:
         break
-      case .ShowingScore:
+      case .showingScore:
         break
-      case .GameOver:
+      case .gameOver:
         if touchedNode.name == "okButton" || touchedNode.name == "okLabel" {
-          switchToNewGame(.MainMenu)
+          switchToNewGame(.mainMenu)
         }
         if touchedNode.name == "shareButton" || touchedNode.name == "shareLabel" {
           shareScore()
@@ -886,7 +955,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   // MARK: Updates
   
-  override func update(currentTime: CFTimeInterval) {
+  override func update(_ currentTime: TimeInterval) {
     
     if lastUpdateTime > 0 {
       dt = currentTime - lastUpdateTime
@@ -896,11 +965,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     lastUpdateTime = currentTime
     
     switch gameState {
-    case .MainMenu:
+    case .mainMenu:
       break
-    case .Tutorial:
+    case .tutorial:
       break
-    case .Play:
+    case .play:
       updateForeground()
       updateBackground()
       updatePlayer()
@@ -909,13 +978,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       updateScore()
       updateDifficultyLevel()
       break
-    case .Falling:
+    case .falling:
       updatePlayer()
       checkHitGround()
       break
-    case .ShowingScore:
+    case .showingScore:
       break
-    case .GameOver:
+    case .gameOver:
       break
     }
     
@@ -946,9 +1015,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func updateForeground() {
     
-    if gameState == .Play {
+    if gameState == .play {
       
-      worldNode.enumerateChildNodesWithName("foreground", usingBlock: { node, stop in
+      worldNode.enumerateChildNodes(withName: "foreground", using: { node, stop in
         if let foreground = node as? SKSpriteNode {
           let moveAmt = CGPoint(x: -self.kGroundSpeed * CGFloat(self.dt), y: 0)
           foreground.position += moveAmt
@@ -963,9 +1032,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func updateBackground() {
     
-    if gameState == .Play {
+    if gameState == .play {
       
-      worldNode.enumerateChildNodesWithName("background", usingBlock: { node, stop in
+      worldNode.enumerateChildNodes(withName: "background", using: { node, stop in
         if let background = node as? SKSpriteNode {
           let moveAmt = CGPoint(x: -self.kBackgroundSpeed * CGFloat(self.dt), y: 0)
           background.position += moveAmt
@@ -993,7 +1062,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       playerVelocity = CGPoint.zero
       player.zRotation = CGFloat(-85).degreesToRadians()
       player.position = CGPoint(x: player.position.x, y: playableStart + player.size.width * 0.4)
-      runAction(hitGroundAction)
+      run(hitGroundAction)
       switchToShowScore()
     }
     
@@ -1001,7 +1070,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func updateScore() {
     
-    worldNode.enumerateChildNodesWithName("bottomObstacle", usingBlock: { node, stop in
+    worldNode.enumerateChildNodes(withName: "bottomObstacle", using: { node, stop in
       if let obstacle = node as? SKSpriteNode {
         if let passed = obstacle.userData?["Passed"] as? NSNumber {
           if passed.boolValue {
@@ -1009,11 +1078,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
           }
         }
         if self.player.position.x > obstacle.position.x + obstacle.size.width/2 {
-          self.score+1
+          self.score = self.score + 1
           self.scoreLabel.text = "\(self.score)"
           self.scoreLabelBackground.text = "\(self.score)"
-          self.runAction(self.coinAction)
-          obstacle.userData?["Passed"] = NSNumber(bool: true)
+          self.run(self.coinAction)
+          obstacle.userData?["Passed"] = NSNumber(value: true as Bool)
           self.checkIfAchievementEarned()
         }
       }
@@ -1024,39 +1093,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   func updateDifficultyLevel() {
     
     switch score {
-    case 0..<10:
+    case 0...9:
       kGapMultiplier    =      1.50
       Gravity           =   -1500.0
       kImpluse          =     600.0
       kAngularVelocity  =     200.0
       kEverySpawnDelay  =       2.5
       break
-    case 11..<20:
-      kGroundSpeed      =     400.0
+    case 10...19:
+      kGroundSpeed      =     350.0
       kEverySpawnDelay  =       2.75
       break
-    case  21..<30:
+    case  20...29:
       kImpluse          =     700.0
-      kGroundSpeed      =     400.0
+      kGroundSpeed      =     375.0
       kEverySpawnDelay  =       3.0
       kBackgroundSpeed  =      75.0
       break
-    case 31..<40:
+    case 30...39:
       kImpluse          =     600.0
       Gravity           =   -1400.0
-      kGroundSpeed      =     500.0
+      kGroundSpeed      =     400.0
       kEverySpawnDelay  =       2.5
       kBackgroundSpeed  =      50.0
       kGapMultiplier    =       2.0
       kAngularVelocity  =      250.0
       break
-    case 41..<50:
+    case 40...49:
       kGroundSpeed      =      400.0
       kGapMultiplier    =        1.75
       Gravity           =    -1500.0
       kImpluse          =      700.0
       break
-    case 51..<60:
+    case 50...59:
       kGapMultiplier    =        2.0
       Gravity           =    -1500.0
       kImpluse          =      600.0
@@ -1064,7 +1133,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       kEverySpawnDelay  =        2.0
       kGroundSpeed      =      300.0
       break
-    case 61..<70:
+    case 60...69:
       kGapMultiplier    =        2.0
       Gravity           =    -1550.0
       kImpluse          =      800.0
@@ -1072,7 +1141,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       kEverySpawnDelay  =        3.0
       kGroundSpeed      =      350.0
       break
-    case 71..<80:
+    case 70...79:
       kGapMultiplier    =        1.50
       Gravity           =    -1600.0
       kImpluse          =      800.0
@@ -1080,7 +1149,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       kEverySpawnDelay  =        3.5
       kGroundSpeed      =      275.0
       break
-    case 81..<90:
+    case 80...89:
       kGapMultiplier    =        1.50
       Gravity           =    -1500.0
       kImpluse          =      600.0
@@ -1090,7 +1159,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       kGroundSpeed      =      300.0
       kBackgroundSpeed  =       50.0
       break
-    case 91..<100:
+    case 90...99:
       kGapMultiplier    =        1.50
       Gravity           =    -1300.0
       kImpluse          =      660.0
@@ -1100,7 +1169,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       kGroundSpeed      =      260.0
       kBackgroundSpeed  =       50.0
       break
-    case 101..<110:
+    case 100...109:
       kGapMultiplier    =        1.9
       Gravity           =    -1400.0
       kImpluse          =      700.0
@@ -1110,7 +1179,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       kGroundSpeed      =      250.0
       kBackgroundSpeed  =       50.0
       break
-    case 111..<120:
+    case 110...119:
       kGapMultiplier    =        1.75
       Gravity           =    -1500.0
       kImpluse          =      600.0
@@ -1137,23 +1206,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func switchToFalling() {
     
-    gameState = .Falling
+    gameState = .falling
     
     // Screen shake
     let shake = SKAction.screenShakeWithNode(worldNode, amount: CGPoint(x: 0, y: 17.0), oscillations: 10, duration: 1.0)
-    worldNode.runAction(shake)
+    worldNode.run(shake)
     
     // Flash Screen
-    let whiteNode = SKSpriteNode(color: SKColor.whiteColor(), size: size)
+    let whiteNode = SKSpriteNode(color: SKColor.white, size: size)
     whiteNode.position = CGPoint(x: size.width/2, y: size.height/2)
-    whiteNode.zPosition = Layer.Flash.rawValue
+    whiteNode.zPosition = Layer.flash.rawValue
     worldNode.addChild(whiteNode)
     
-    whiteNode.runAction(SKAction.removeFromParentAfterDelay(0.01))
+    whiteNode.run(SKAction.removeFromParentAfterDelay(0.01))
     
-    runAction(SKAction.sequence([
+    run(SKAction.sequence([
       whackAction,
-      SKAction.waitForDuration(0.1),
+      SKAction.wait(forDuration: 0.1),
       fallingAction
       ]))
     
@@ -1164,33 +1233,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func switchToShowScore() {
     
-    gameState = .ShowingScore
+    gameState = .showingScore
     player.removeAllActions()
     stopSpawning()
+    musicButtonOn.isHidden = true
+    musicButtonOff.isHidden = true
     setupScorecard()
     
   }
   
-  func switchToNewGame(gameState: GameState) {
+  func switchToNewGame(_ gameState: GameState) {
     
-    runAction(popAction)
+    run(popAction)
     
     let newScene = GameScene(size: CGSize(width: 1536, height: 2048),delegate: gameSceneDelegate, gameState: gameState)
-    newScene.scaleMode = .AspectFill
-    let transition = SKTransition.fadeWithColor(SKColor.blackColor(), duration: 0.5)
+    newScene.scaleMode = .aspectFill
+    let transition = SKTransition.fade(with: SKColor.black, duration: 0.5)
     view?.presentScene(newScene, transition: transition)
     
   }
   
   func switchToGameOver() {
     
-    gameState = .GameOver
+    gameState = .gameOver
     
+    if isMusicOn == true {
+      fadePlayer(backgroundMusicPlayer, fromVolume: 0.4, toVolume: 0.0, overTime: 3.0)
+    }
   }
   
   func switchToMainMenu() {
     
-    gameState = .MainMenu
+    gameState = .mainMenu
     
     setupBackground()
     setupForeground()
@@ -1204,34 +1278,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func switchToTutorial() {
     
-    gameState = .Tutorial
+    gameState = .tutorial
     
     setupBackground()
     setupForeground()
     //setupPlayer()
     //setupPlayerHat()
     setupLabel()
+    setupHud()
     setupTutorial()
     setupPlayerAnimation()
    // setupTopObstacleAnimation()
+    
+    if isMusicOn == true {
+      playBackgroundMusic("Dancing on Green Grass.mp3")
+      musicButtonOn.isHidden = false
+      musicButtonOff.isHidden = true
+      fadePlayer(backgroundMusicPlayer, fromVolume: 0.0, toVolume: 0.4, overTime: 2.0)
+    } else {
+      playBackgroundMusic("Dancing on Green Grass.mp3")
+      musicButtonOn.isHidden = true
+      musicButtonOff.isHidden = false
+      stopBackgroundMusic()
+      
+      //fadePlayer(backgroundMusicPlayer, fromVolume: 0.4, toVolume: 0.0, overTime: 0.0)
+    }
     
   }
   
   func switchToPlay() {
     
     // Set state
-    gameState = .Play
+    gameState = .play
     
     // Remove Tutorial
-    worldNode.enumerateChildNodesWithName("Tutorial", usingBlock: { node, stop in
-      node.runAction(SKAction.sequence([
-        SKAction.fadeOutWithDuration(0.3),
+    worldNode.enumerateChildNodes(withName: "Tutorial", using: { node, stop in
+      node.run(SKAction.sequence([
+        SKAction.fadeOut(withDuration: 0.3),
         SKAction.removeFromParent()
         ]))
     })
     
     // Stop player bounce
-    player.removeActionForKey("playerBounce")
+    player.removeAction(forKey: "playerBounce")
     
     // Add Player to scene
     setupPlayer()
@@ -1251,18 +1340,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   // MARK: Score Card
   
   func bestScore() -> Int {
-    return NSUserDefaults.standardUserDefaults().integerForKey("BestScore")
+    return UserDefaults.standard.integer(forKey: "BestScore")
   }
   
-  func setBestScore(bestScore: Int) {
-    NSUserDefaults.standardUserDefaults().setInteger(bestScore, forKey: "BestScore")
-    NSUserDefaults.standardUserDefaults().synchronize()
+  func setBestScore(_ bestScore: Int) {
+    UserDefaults.standard.set(bestScore, forKey: "BestScore")
+    UserDefaults.standard.synchronize()
   }
   
   func shareScore() {
     
     let urlString = "http://itunes.apple.com/app/id\(kAppStoreID)?mt=8"
-    let url = NSURL(string: urlString)
+    let url = URL(string: urlString)
     
     // Use delegate to get a screen shot
     let screenShot = gameSceneDelegate.screenShot()
@@ -1277,15 +1366,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   func rateApp() {
     
     let urlString = "http://itunes.apple.com/app/id\(kAppStoreID)?mt=8"
-    let url = NSURL(string: urlString)
-    UIApplication.sharedApplication().openURL(url!)
+    let url = URL(string: urlString)
+    UIApplication.shared.openURL(url!)
     
   }
   
   
   // MARK: Physics
   
-  func didBeginContact(contact: SKPhysicsContact) {
+  func didBegin(_ contact: SKPhysicsContact) {
     let other = contact.bodyA.categoryBitMask == PhysicsCategory.Player ? contact.bodyB : contact.bodyA
     
     if other.categoryBitMask == PhysicsCategory.Ground {
@@ -1308,9 +1397,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       if (viewController != nil) {
         // If not authenticated, popup view controller to log into Game Center
         let vc:UIViewController = self.view!.window!.rootViewController!
-        vc.presentViewController(viewController!, animated: true, completion: nil)
+        vc.present(viewController!, animated: true, completion: nil)
       } else {
-        print("Authentication is \(GKLocalPlayer.localPlayer().authenticated) ")
+        print("Authentication is \(GKLocalPlayer.localPlayer().isAuthenticated) ")
         // do something based on the player being logged in.
         
         self.gameCenterAchievements.removeAll()
@@ -1321,16 +1410,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     
   }
   
-  func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController) {
+  func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
     
-    gameCenterViewController.dismissViewControllerAnimated(true, completion: nil)
+    gameCenterViewController.dismiss(animated: true, completion: nil)
     
     gameCenterAchievements.removeAll()
     loadAchievementPercentages()
     
   }
   
-  func showGameCenter(viewState: String = "") {
+  func showGameCenter(_ viewState: String = "") {
     
     let gameCenterViewController = GKGameCenterViewController()
     
@@ -1338,20 +1427,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
 
     // options for what to initially show...
     if viewState == "Achievements" {
-      gameCenterViewController.viewState = GKGameCenterViewControllerState.Achievements
+      gameCenterViewController.viewState = GKGameCenterViewControllerState.achievements
     } else if viewState == "Leaderboards" {
       gameCenterViewController.leaderboardIdentifier = kLeaderboardID
-      gameCenterViewController.viewState = GKGameCenterViewControllerState.Leaderboards
+      gameCenterViewController.viewState = GKGameCenterViewControllerState.leaderboards
     }
     
     let vc:UIViewController = self.view!.window!.rootViewController!
-    vc.presentViewController(gameCenterViewController, animated: true, completion: nil)
+    vc.present(gameCenterViewController, animated: true, completion: nil)
     
   }
   
-  func saveHighScore(identifier: String, score: Int) {
+  func saveHighScore(_ identifier: String, score: Int) {
     
-    if (GKLocalPlayer.localPlayer().authenticated) {
+    if (GKLocalPlayer.localPlayer().isAuthenticated) {
       
       let scoreReporter = GKScore(leaderboardIdentifier: identifier)
       
@@ -1361,7 +1450,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       
       let scoreArray:[GKScore] = [scoreReporter]
       
-      GKScore.reportScores(scoreArray, withCompletionHandler: {
+      GKScore.report(scoreArray, withCompletionHandler: {
         
         error -> Void in
         
@@ -1380,7 +1469,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   func loadAchievementPercentages() {
     
     print("getting percentage of past achievements")
-    GKAchievement.loadAchievementsWithCompletionHandler({ (allAchievements, error) -> Void in
+    GKAchievement.loadAchievements(completionHandler: { (allAchievements, error) -> Void in
       
       if error != nil {
         print("Game center could not load achievements, the error is \(error)")
@@ -1390,7 +1479,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
           
           for theAchievement in allAchievements! {
             
-            if let singleAchievement:GKAchievement = theAchievement {
+            if let singleAchievement:GKAchievement = theAchievement as GKAchievement! {
               self.gameCenterAchievements[singleAchievement.identifier!] = singleAchievement
             }
           }
@@ -1404,9 +1493,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     
   }
   
-  func incrementCurrentPercentOfAchievement(identifier: String, amount: Double) {
+  func incrementCurrentPercentOfAchievement(_ identifier: String, amount: Double) {
     
-    if GKLocalPlayer.localPlayer().authenticated {
+    if GKLocalPlayer.localPlayer().isAuthenticated {
       
       var currentPercentFound:Bool = false
       
@@ -1436,7 +1525,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     }
   }
   
-  func reportAchievement(identifier: String, percentComplete: Double) {
+  func reportAchievement(_ identifier: String, percentComplete: Double) {
     
     let achievement = GKAchievement(identifier: identifier)
     
@@ -1446,7 +1535,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     
     let achievementArray:[GKAchievement] = [achievement]
     
-    GKAchievement.reportAchievements(achievementArray, withCompletionHandler: {
+    GKAchievement.report(achievementArray, withCompletionHandler: {
       
       error -> Void in
       
@@ -1466,7 +1555,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   func clearAchievementsInGameCenter() {
     
-    GKAchievement.resetAchievementsWithCompletionHandler({
+    GKAchievement.resetAchievements(completionHandler: {
       (error) -> Void in
       
       if (error != nil ) {
@@ -1536,16 +1625,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
   
   // MARK: Date Calculations
   
-  func howManyDaysUntil(end: String, start: NSDate = NSDate()) -> Int {
+  func howManyDaysUntil(_ end: String, start: Date = Date()) -> Int {
     
     //    let start = "01-01-2016"
     //    let end = "12-25-2016"
     
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MM-dd-yyyy"
     
     // let startDate:NSDate = dateFormatter.dateFromString(start)!
-    let endDate:NSDate = dateFormatter.dateFromString(end)!
+    let endDate:Date = dateFormatter.date(from: end)!
     
     let numOfDays = daysBetweenDate(start, endDate: endDate)
     
@@ -1553,12 +1642,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     return numOfDays
   }
   
-  func daysBetweenDate(startDate: NSDate, endDate: NSDate) -> Int {
-    let calendar = NSCalendar.currentCalendar()
+  func daysBetweenDate(_ startDate: Date, endDate: Date) -> Int {
+    let calendar = Calendar.current
     
-    let components = calendar.components([.Day], fromDate: startDate, toDate: endDate, options: [])
+    let components = (calendar as NSCalendar).components([.day], from: startDate, to: endDate, options: [])
     
-    return components.day
+    return components.day!
   }
   
 }

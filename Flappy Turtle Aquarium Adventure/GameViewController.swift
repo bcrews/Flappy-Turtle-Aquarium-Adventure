@@ -23,20 +23,21 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
       if skView.scene == nil {
         
         // Create the scene
-        let scene = GameScene(size: CGSize(width: 1536, height: 2048), delegate: self, gameState: .MainMenu)
+        let scene = GameScene(size: CGSize(width: 1536, height: 2048), delegate: self, gameState: .mainMenu)
         
         skView.showsFPS = false
         skView.showsNodeCount = false
         skView.showsPhysics = false
         skView.ignoresSiblingOrder = true
         
-        scene.scaleMode = .AspectFill
+        scene.scaleMode = .aspectFill
 
-        iadBanner.delegate = self
-        iadBanner.hidden = true
-        skView.addSubview(iadBanner)
+//        iadBanner.delegate = self
+//        iadBanner.isHidden = true
+//        skView.addSubview(iadBanner)
       
         skView.presentScene(scene)
+        
       }
       
       
@@ -44,7 +45,7 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
     }
   }
   
-  override func prefersStatusBarHidden() -> Bool {
+  override var prefersStatusBarHidden : Bool {
     return true
   }
   
@@ -54,16 +55,16 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
   
   // MARK: Delegate methods for AdBannerView
   
-  func bannerViewDidLoadAd(banner: ADBannerView!) {
-    iadBanner.hidden = false
+  func bannerViewDidLoadAd(_ banner: ADBannerView!) {
+    iadBanner.isHidden = false
   }
 
-  func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
+  func bannerView(_ banner: ADBannerView!, didFailToReceiveAdWithError error: Error!) {
     print("\(error)")
-    iadBanner.hidden = true
+    iadBanner.isHidden = true
   }
   
-  func bannerViewActionShouldBegin(banner: ADBannerView!, willLeaveApplication willLeave: Bool) -> Bool {
+  func bannerViewActionShouldBegin(_ banner: ADBannerView!, willLeaveApplication willLeave: Bool) -> Bool {
     return true
   }
   
@@ -73,26 +74,26 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
   func screenShot() -> UIImage {
     
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 1.0)
-    view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+    view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
     let image = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
-    return image
+    return image!
     
   }
   
-  func shareString(string: String, url: NSURL, image: UIImage) {
+  func shareString(_ string: String, url: URL, image: UIImage) {
     
     let vc = UIActivityViewController(activityItems: [string, url, image], applicationActivities: nil)
     
     // if iPhone
-    if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Phone {
+    if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone {
     
-      presentViewController(vc, animated: true, completion: nil)
+      present(vc, animated: true, completion: nil)
     }
     // iPad
     else {
       let popup: UIPopoverController = UIPopoverController(contentViewController: vc)
-      popup.presentPopoverFromRect(CGRectMake(self.view.frame.width * 0.68, self.view.frame.height * 0.68,0,0), inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Down, animated: true)
+      popup.present(from: CGRect(x: self.view.frame.width * 0.68, y: self.view.frame.height * 0.68,width: 0,height: 0), in: self.view, permittedArrowDirections: UIPopoverArrowDirection.down, animated: true)
     }
   }
  
