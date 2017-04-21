@@ -8,12 +8,9 @@
 
 import UIKit
 import SpriteKit
-import iAd
 import GameKit
 
-class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDelegate {
-  
-  @IBOutlet weak var iadBanner: ADBannerView!
+class GameViewController: UIViewController, GameSceneDelegate {
   
   override func viewWillLayoutSubviews() {
     
@@ -31,16 +28,10 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
         skView.ignoresSiblingOrder = true
         
         scene.scaleMode = .aspectFill
-
-//        iadBanner.delegate = self
-//        iadBanner.isHidden = true
-//        skView.addSubview(iadBanner)
       
         skView.presentScene(scene)
         
       }
-      
-      
       
     }
   }
@@ -53,22 +44,7 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
     super.viewDidLoad()
   }
   
-  // MARK: Delegate methods for AdBannerView
-  
-  func bannerViewDidLoadAd(_ banner: ADBannerView!) {
-    iadBanner.isHidden = false
-  }
 
-  func bannerView(_ banner: ADBannerView!, didFailToReceiveAdWithError error: Error!) {
-    print("\(error)")
-    iadBanner.isHidden = true
-  }
-  
-  func bannerViewActionShouldBegin(_ banner: ADBannerView!, willLeaveApplication willLeave: Bool) -> Bool {
-    return true
-  }
-  
-  
   // MARK: Implemented functions
   
   func screenShot() -> UIImage {
@@ -97,8 +73,6 @@ class GameViewController: UIViewController, GameSceneDelegate, ADBannerViewDeleg
     }
   }
  
-
-  
 }
 
 

@@ -7,7 +7,6 @@
 //
 
 import SpriteKit
-import iAd
 import GameKit
 
 //MARK: enum's
@@ -44,7 +43,7 @@ protocol GameSceneDelegate {
 }
 
 
-class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGameCenterControllerDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate, GKGameCenterControllerDelegate {
   
   // MARK: Constants
   
@@ -1455,7 +1454,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
         error -> Void in
         
         if (error != nil) {
-          print("\(error)")
+          print("\(error!)")
         } else {
           
           print("Posted score of \(score)")
@@ -1472,7 +1471,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
     GKAchievement.loadAchievements(completionHandler: { (allAchievements, error) -> Void in
       
       if error != nil {
-        print("Game center could not load achievements, the error is \(error)")
+        print("Game center could not load achievements, the error is \(error!)")
       } else {
         // this could be nil if there was no progress on any achievements thus far
         if (allAchievements != nil) {
@@ -1540,7 +1539,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       error -> Void in
       
       if ( error != nil) {
-        print("\(error)")
+        print("\(error!)")
       } else {
         
         print("reported achievement with percent complete of \(percentComplete)")
@@ -1559,7 +1558,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ADBannerViewDelegate, GKGame
       (error) -> Void in
       
       if (error != nil ) {
-        print("\(error)")
+        print("\(error!)")
       } else {
         
         print("clearing all achievements in Game Center")

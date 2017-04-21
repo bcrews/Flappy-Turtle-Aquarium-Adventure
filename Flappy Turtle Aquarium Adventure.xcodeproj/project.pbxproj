@@ -38,7 +38,6 @@
 		42CB6A2F1C48510F00567930 /* hitGround.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A281C48510F00567930 /* hitGround.wav */; };
 		42CB6A301C48510F00567930 /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A291C48510F00567930 /* pop.wav */; };
 		42CB6A311C48510F00567930 /* whack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 42CB6A2A1C48510F00567930 /* whack.wav */; };
-		42CB6A331C488BE300567930 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CB6A321C488BE300567930 /* iAd.framework */; };
 		42CE74C71C4A24E700ACC89A /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CE74C61C4A24E700ACC89A /* GameKit.framework */; };
 		42E515741C4B6BFF007B9494 /* HelperAchivementFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E515731C4B6BFF007B9494 /* HelperAchivementFiles.swift */; };
 		42E5157D1C4DF093007B9494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42E5157F1C4DF093007B9494 /* Localizable.strings */; };
@@ -81,7 +80,6 @@
 		42CB6A281C48510F00567930 /* hitGround.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitGround.wav; sourceTree = "<group>"; };
 		42CB6A291C48510F00567930 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
 		42CB6A2A1C48510F00567930 /* whack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whack.wav; sourceTree = "<group>"; };
-		42CB6A321C488BE300567930 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		42CE74C61C4A24E700ACC89A /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		42E515731C4B6BFF007B9494 /* HelperAchivementFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperAchivementFiles.swift; sourceTree = "<group>"; };
 		42E515751C4DBAF7007B9494 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42CB6A331C488BE300567930 /* iAd.framework in Frameworks */,
 				42CE74C71C4A24E700ACC89A /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,7 +120,6 @@
 			isa = PBXGroup;
 			children = (
 				42CE74C61C4A24E700ACC89A /* GameKit.framework */,
-				42CB6A321C488BE300567930 /* iAd.framework */,
 				42C1EC2A1C3F4E44002E07AB /* Flappy Turtle Aquarium Adventure */,
 				42C1EC291C3F4E44002E07AB /* Products */,
 			);
