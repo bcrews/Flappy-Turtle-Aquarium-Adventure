@@ -511,7 +511,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.BCAppDesigns.Flappy-Turtle--Aquarium-Adventure";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.BCAppDesigns.Flappy-Turtle-Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
@@ -531,7 +531,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"MTL_ENABLE_DEBUG_INFO[arch=*]" = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.BCAppDesigns.Flappy-Turtle--Aquarium-Adventure";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.BCAppDesigns.Flappy-Turtle-Aquarium-Adventure";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
